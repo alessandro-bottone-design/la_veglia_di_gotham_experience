@@ -39,3 +39,8 @@ Nelle schermate in cui l'interfaccia utente (UI) è posizionata al di sopra dell
 - Non devono mai essere introdotte barre scure, gradienti o sfondi opachi dietro la navbar.
 - L'ambiente 3D o i filmati a schermo intero devono estendersi a filo del bordo superiore (`inset: 0`), posizionando i controlli dell'HUD direttamente in overlay sulla scena.
 
+## 3. Maiuscolo per Space Grotesk
+
+- Visualizza sempre in maiuscolo ogni testo in Space Grotesk, in tutti i pesi, le dimensioni e gli stati del Design System.
+- Applica `text-transform: uppercase` alla regola CSS che assegna il font o eredita la trasformazione da uno stile condiviso. Conserva il copy originale nei sorgenti e ripristina `text-transform: none` dove un elemento figlio passa a Poppins.
+

@@ -5,6 +5,7 @@
 .ds-body-small-space,
 .ds-caption {
   font-family: "Space Grotesk", sans-serif;
+  text-transform: uppercase;
   font-weight: 400;
   letter-spacing: 0;
   color: var(--tone);
@@ -44,6 +45,7 @@
 .ds-body,
 .ds-body-small {
   font-family: Poppins, sans-serif;
+  text-transform: none;
   font-weight: 700;
   color: var(--white);
 }
@@ -83,6 +85,7 @@
 .ds-button,
 .ds-icon-button {
   font-family: "Space Grotesk", sans-serif;
+  text-transform: uppercase;
   font-weight: 700;
   background: var(--black);
   color: var(--tone);
