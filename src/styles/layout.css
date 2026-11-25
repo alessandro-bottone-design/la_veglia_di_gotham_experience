@@ -171,6 +171,7 @@
   font:
     20px/21px "Space Grotesk",
     sans-serif;
+  text-transform: uppercase;
 }
 .skip-link:focus {
   top: 20px;

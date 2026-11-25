@@ -65,6 +65,7 @@
   font:
     16px/1.65 "Space Grotesk",
     sans-serif;
+  text-transform: uppercase;
   text-align: center;
   padding: 30px;
 }

@@ -41,6 +41,7 @@
   color: var(--white);
   text-align: center;
   font: 14px/1.5 "Space Grotesk", sans-serif;
+  text-transform: uppercase;
   text-shadow: 0 1px 5px var(--black);
   pointer-events: none;
 }

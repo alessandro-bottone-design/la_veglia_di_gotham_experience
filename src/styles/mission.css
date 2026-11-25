@@ -243,6 +243,7 @@
   font:
     700 12px/16px "Space Grotesk",
     sans-serif;
+  text-transform: uppercase;
 }
 .ds-answer[data-state="active"]:hover:not(:disabled) {
   background: var(--black);

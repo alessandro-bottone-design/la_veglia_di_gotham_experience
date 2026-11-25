@@ -107,6 +107,7 @@
   font:
     700 20px/28px "Space Grotesk",
     sans-serif;
+  text-transform: uppercase;
   color: var(--tone);
 }
 .ds-order-summary > div {
@@ -120,6 +121,7 @@
 .ds-order-summary dd {
   flex: none;
   font: 700 16px/24px Poppins, sans-serif;
+  text-transform: none;
 }
 .ds-order-summary > div:last-child {
   font-size: 30px;
@@ -127,6 +129,7 @@
 }
 .ds-order-summary > div:last-child dd {
   font: inherit;
+  text-transform: inherit;
 }
 .ds-payment {
   width: 100%;
