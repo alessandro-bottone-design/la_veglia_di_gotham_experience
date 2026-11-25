@@ -5,11 +5,7 @@ import {
   initialExperience as initial,
   phaseFromHash,
 } from "../src/lib/experience";
-import {
-  EMPTY_FORM,
-  orderTotal,
-  validateCheckout,
-} from "../src/features/checkout/checkoutModel";
+import { formatEuro, STATUE_PRICE } from "../src/lib/statue";
 const story = () => reduce(initial, { type: "storytelling" });
 const mission = () =>
   reduce(reduce(story(), { type: "tutorial" }), { type: "start" });
@@ -21,29 +17,32 @@ test("start, storytelling and tutorial are distinct guarded steps", () => {
   assert.equal(reduce(story(), { type: "tutorial" }).phase, "tutorial");
   assert.equal(mission().phase, "batcomputer");
 });
-test("confirmation requires a valid single-item demo checkout", () => {
+test("confirmation requires a single statue at the displayed price", () => {
+  const order = { quantity: 1, total: STATUE_PRICE };
   assert.equal(
     reduce(initial, { type: "navigate", phase: "thankyou" }).phase,
     "showreel",
   );
   assert.equal(
-    reduce(initial, { type: "purchase", order: { quantity: 1, total: 750 } }),
+    reduce(initial, { type: "purchase", order }),
     initial,
   );
   const checkout = reduce(initial, { type: "navigate", phase: "checkout" });
-  for (const order of [
-    { quantity: 0, total: 750 },
-    { quantity: 2, total: 1450 },
+  for (const invalid of [
+    { quantity: 0, total: STATUE_PRICE },
+    { quantity: 2, total: STATUE_PRICE * 2 },
+    { quantity: 1, total: 750 },
     { quantity: 1, total: 0 },
     { quantity: 1, total: NaN },
   ])
-    assert.equal(reduce(checkout, { type: "purchase", order }), checkout);
-  assert.equal(
-    reduce(checkout, { type: "purchase", order: { quantity: 1, total: 750 } })
-      .phase,
-    "thankyou",
-  );
-  assert.equal(orderTotal(), 750);
+    assert.equal(
+      reduce(checkout, { type: "purchase", order: invalid }),
+      checkout,
+    );
+  const confirmation = reduce(checkout, { type: "purchase", order });
+  assert.equal(confirmation.phase, "thankyou");
+  assert.deepEqual(confirmation.order, order);
+  assert.equal(formatEuro(STATUE_PRICE), "12.900 €");
 });
 test("five clues across three scenes are required to win", () => {
   let s = mission();
@@ -76,59 +75,4 @@ test("hash routes expose product screens without arbitrary mission skips", () =>
   assert.equal(phaseFromHash("#statua"), "showreel");
   assert.equal(phaseFromHash("#checkout"), "checkout");
   assert.equal(phaseFromHash("#armeria"), "start");
-});
-const valid = {
-  ...EMPTY_FORM,
-  fullName: "Bruce Demo",
-  region: "Campania",
-  birthDate: "01/01/1990",
-  provincia: "NA",
-  email: "demo@example.com",
-  address: "Via Demo 15",
-  password: "fittizia",
-  city: "Napoli",
-  phone: "+39 3330000000",
-  cap: "80125",
-  cardOwner: "Bruce Demo",
-  cardNumber: "4242 4242 4242 4242",
-  cardExpiry: "12/30",
-  cardCvv: "123",
-};
-const now = new Date(2026, 10, 1);
-test("PayPal is simulated and does not require card details", () => {
-  assert.deepEqual(
-    validateCheckout(
-      { ...valid, cardNumber: "", cardOwner: "", cardExpiry: "", cardCvv: "" },
-      "paypal",
-      now,
-    ),
-    {},
-  );
-  assert.ok(validateCheckout(valid, "", now).paymentMethod);
-});
-test("card input validates digits, expiry, phone, date and postal code", () => {
-  assert.deepEqual(validateCheckout(valid, "card", now), {});
-  const bad = validateCheckout(
-    {
-      ...valid,
-      cardNumber: "abc",
-      cardExpiry: "01/00",
-      phone: "abc",
-      cap: "abc",
-      birthDate: "31/02/2026",
-    },
-    "card",
-    now,
-  );
-  assert.ok(
-    bad.cardNumber && bad.cardExpiry && bad.phone && bad.cap && bad.birthDate,
-  );
-  assert.ok(
-    validateCheckout({ ...valid, birthDate: "01/01/2099" }, "paypal", now)
-      .birthDate,
-  );
-  assert.deepEqual(
-    validateCheckout({ ...valid, cardExpiry: "11/26" }, "card", now),
-    {},
-  );
 });

@@ -28,7 +28,7 @@
   --black: #010013;
   --white: #faf9f6;
   --tone: var(--yellow);
-  --nav-height: 166px;
+  --nav-height: 146px;
   --screen-background: color-mix(in srgb, var(--black) 40%, #181818);
   --glare-yellow: drop-shadow(0 16px 32px rgb(255 215 0 / 0.15))
     drop-shadow(0 8px 16px rgb(255 215 0 / 0.3))

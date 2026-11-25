@@ -1,3 +1,5 @@
+import { STATUE_PRICE } from "./statue";
+
 export type Phase =
   | "start"
   | "storytelling"
@@ -102,7 +104,7 @@ export function experienceReducer(s: Experience, a: Action): Experience {
     case "purchase":
       return s.phase === "checkout" &&
         a.order.quantity === 1 &&
-        a.order.total === 750
+        a.order.total === STATUE_PRICE
         ? { ...s, phase: "thankyou", order: a.order }
         : s;
   }

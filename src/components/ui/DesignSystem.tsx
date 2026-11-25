@@ -55,7 +55,7 @@ export function BatmanLoadingAnimation() {
       >
         <motion.path
           d={BATMAN_LOADING_PATH}
-          stroke="#FFD700"
+          stroke="var(--yellow)"
           strokeWidth={10}
           pathLength={1}
           initial={
@@ -84,7 +84,7 @@ export function BatmanLoadingAnimation() {
 
 export function LoadingScreen({
   className = "",
-  srLabel = "Inizializzazione della Batcaverna",
+  srLabel = "Caricamento della Batcaverna…",
 }: {
   className?: string;
   srLabel?: string;
@@ -93,14 +93,14 @@ export function LoadingScreen({
     <div
       className={"ds-loading-screen loading-screen " + className}
       role="status"
-      data-figma-node="359:3835"
+      data-figma-node="395:14845"
     >
       <div className="ds-loading-stack" data-figma-node="359:3826">
         <BatmanLoadingAnimation />
         <div className="ds-loading-text" data-figma-node="359:3822">
           <span className="sr-only">{srLabel}</span>
           <p className="ds-display" aria-hidden="true">
-            LOADING...
+            Caricamento…
           </p>
         </div>
       </div>
@@ -174,7 +174,7 @@ export function Logos({ plain = false }: { plain?: boolean }) {
       className={"ds-logos" + (plain ? " ds-logos-plain" : " ds-glow-text")}
       aria-label="Sideshow × Batman"
       role="img"
-      data-figma-node={plain ? "267:1712" : "264:1679"}
+      data-figma-node={plain ? "264:1677" : "264:1678"}
     >
       <img src="/assets/ds/sideshow.svg" alt="" />
       <img src="/assets/ds/brand-x.svg" alt="" />
@@ -227,22 +227,14 @@ export function MobileNotice() {
       </header>
       <section
         className="ds-panel ds-mobile-card"
-        data-figma-node="238:2970"
+        data-figma-node="402:2762"
         aria-labelledby="mobile-title"
       >
         <h1 id="mobile-title" className="ds-heading">
-          DISPOSITIVO
-          <br />
-          NON COMPATIBILE
+          Apri il sito da computer
         </h1>
         <p className="ds-body-small">
-          L’esplorazione immersiva
-          <br />
-          della BatCaverna
-          <br />
-          richiede un monitor
-          <br />
-          desktop e un mouse.
+          Usa un mouse per guardarti intorno nella Batcaverna.
         </p>
       </section>
     </main>

@@ -7,6 +7,12 @@ import {
   type MotionValue,
 } from "motion/react";
 import { Button, LoadingScreen } from "../../components/ui/DesignSystem";
+import {
+  PREORDER_LABEL,
+  STATUE_DESCRIPTION,
+  STATUE_DIMENSIONS,
+  STATUE_NAME,
+} from "../../lib/statue";
 
 import {
   frameSource,
@@ -16,24 +22,24 @@ import {
 
 const QUALITIES = [
   [
-    "357:3646",
+    "404:3118",
     "right",
-    "PRESENZA LEGGENDARIA",
-    "Non arredamento, una presenza.",
+    "Bronzo a cera persa",
+    "La fusione cava a cera persa riprende anche le pieghe più strette del mantello, dove si raccoglie sul petto.",
     [0.03, 0.07, 0.24, 0.29],
   ],
   [
-    "357:3645",
+    "404:3133",
     "left",
-    "MATERIALI D’ELITE",
-    "Finitura da pezzo da museo, non da scaffale.",
+    "La posa sul gargoyle",
+    "Batman è accovacciato, con il busto proteso in avanti e una mano sulla testa del gargoyle.",
     [0.34, 0.38, 0.54, 0.59],
   ],
   [
-    "357:3644",
+    "404:3140",
     "right",
-    "SCULTURA DI PRECISIONE",
-    "Ogni ombra di Gotham scolpita con precisione.",
+    "Patina bruna",
+    "I bordi del guanto riflettono più luce. Nelle rientranze il bronzo resta più scuro.",
     [0.65, 0.69, 0.84, 0.89],
   ],
 ] as const;
@@ -123,7 +129,7 @@ export default function ShowreelScreen({
       <section
         ref={stage}
         className="statue-stage"
-        aria-label="Presentazione della statua Batman"
+        aria-label="Presentazione della statua di Batman"
       >
         <div className="ds-showreel-media">
           {reduced ? (
@@ -132,14 +138,14 @@ export default function ShowreelScreen({
               src={
                 frameSource(SHOWREEL_POSTER) + (retry ? "?retry=" + retry : "")
               }
-              alt="Statua Batman"
+              alt="Batman accovacciato sul gargoyle"
               onLoad={() => setLoaded(true)}
               onError={() => setFailed(true)}
             />
           ) : (
             <canvas
               ref={canvas}
-              aria-label="Sequenza della statua Batman controllata dallo scorrimento"
+              aria-label="Dettagli della statua di Batman"
               role="img"
             />
           )}
@@ -149,7 +155,7 @@ export default function ShowreelScreen({
             className="ds-showreel-hint"
             style={{ opacity: hintOpacity, visibility: hintVisibility }}
           >
-            Scorri per esplorare ↓
+            Scorri per vedere la statua ↓
           </motion.p>
         )}
         {!reduced &&
@@ -163,9 +169,9 @@ export default function ShowreelScreen({
             >
               <div
                 className="ds-panel ds-primary ds-showreel-card"
-                data-figma-node="357:3499"
+                data-figma-node="241:3517"
               >
-                <h1 className="ds-heading-l">{title}</h1>
+                <h2 className="ds-heading-l">{title}</h2>
                 <p className="ds-body">{description}</p>
               </div>
             </ScrollOverlay>
@@ -174,15 +180,19 @@ export default function ShowreelScreen({
           progress={progress}
           stops={FINAL_FADE}
           className="ds-showreel-final"
-          node="357:3647"
+          node="404:3125"
           staticView={reduced}
         >
-          <h1 className="ds-display ds-glow-text">L’EREDITÀ È TUA</h1>
+          <h1 className="ds-display ds-glow-text">{STATUE_NAME}</h1>
+          <div className="ds-showreel-facts">
+            <p>{STATUE_DESCRIPTION}</p>
+            <p>{STATUE_DIMENSIONS}</p>
+          </div>
           <Button
             onClick={onPreorder}
             disabled={!reduced && (!loaded || !finalReady)}
           >
-            PREORDINA IL CAVALIERE
+            {PREORDER_LABEL}
           </Button>
           {reduced && (
             <ul className="sr-only">
@@ -197,10 +207,7 @@ export default function ShowreelScreen({
         {!loaded &&
           (failed ? (
             <div className="statue-loading" role="status">
-              <p>
-                Sequenza non disponibile. Puoi riprovare o proseguire con la
-                demo.
-              </p>
+              <p>Il browser non riesce a caricare le immagini della statua.</p>
               <button
                 onClick={() => {
                   setFailed(false);
@@ -213,7 +220,7 @@ export default function ShowreelScreen({
           ) : (
             <LoadingScreen
               className="statue-loading"
-              srLabel="Preparazione del primo fotogramma…"
+              srLabel="Caricamento delle immagini della statua…"
             />
           ))}
       </section>

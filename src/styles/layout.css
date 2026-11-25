@@ -57,12 +57,6 @@
     ),
     color-mix(in srgb, var(--black) 40%, transparent);
 }
-.experience-shell[data-paused="true"] > .batcave-backdrop {
-  z-index: 100;
-}
-.ds-pause {
-  background: transparent;
-}
 .ds-navbar {
   position: sticky;
   top: 0;
@@ -71,8 +65,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 30px;
-  min-height: 166px;
-  padding-right: 50px;
+  min-height: 146px;
+  padding-right: clamp(24px, 4.17vw, 80px);
   width: 100%;
   background: transparent;
   pointer-events: none;
@@ -101,8 +95,8 @@
   outline: 2px solid var(--purple);
   border-radius: 20px;
   padding: 10px 20px;
-  min-height: 89px;
-  width: 196px;
+  min-height: 93px;
+  width: 191px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -154,6 +148,9 @@
     opacity: 0;
   }
 }
+.experience-shell[data-paused="true"] .ds-progress-pulse {
+  animation-play-state: paused;
+}
 @media (prefers-reduced-motion: reduce) {
   .ds-progress-fill {
     transition: none;
@@ -190,8 +187,13 @@
 
 .ds-pause {
   position: fixed;
-  inset: var(--nav-height) 0 0;
+  inset: 0;
   z-index: 150;
+  display: grid;
+  place-items: center;
+  padding: var(--nav-height) 20px 0;
+  text-align: center;
+  background: color-mix(in srgb, var(--black) 40%, transparent);
   overflow: auto;
 }
 .ds-mobile-page {
@@ -216,9 +218,9 @@
   align-items: center;
   justify-content: center;
   gap: 20px;
-  width: 334px;
+  width: 374px;
   max-width: 100%;
-  min-height: 293px;
+  min-height: 333px;
   padding: 20px;
   border-radius: 20px;
   text-align: center;

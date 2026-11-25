@@ -11,9 +11,9 @@
   padding-top: 89px;
 }
 .ds-checkout-card {
-  width: 720px;
+  width: 743px;
   max-width: 100%;
-  min-height: 648px;
+  min-height: 695px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -21,19 +21,19 @@
   justify-content: space-between;
   gap: 20px;
 }
-.ds-checkout-shipping {
-  min-height: 675px;
-}
 .ds-checkout:has(.ds-checkout-shipping) {
   padding-top: 89px;
 }
 .ds-checkout-payment {
-  width: 458px;
-  min-height: 431px;
+  width: 342px;
+  min-height: 423px;
+}
+.ds-checkout-payment:has(.ds-card-fields) {
+  width: 763px;
 }
 .ds-checkout-order {
-  width: 432px;
-  min-height: 570px;
+  width: 340px;
+  min-height: 450px;
   align-items: stretch;
   gap: 10px;
 }
@@ -44,7 +44,7 @@
   align-items: center;
 }
 .ds-checkout-notice {
-  max-width: 720px;
+  max-width: 743px;
 }
 .ds-checkout-grid,
 .ds-card-fields {
@@ -105,7 +105,7 @@
   width: 100%;
   gap: 20px;
   font:
-    700 16px/24px "Space Grotesk",
+    700 20px/28px "Space Grotesk",
     sans-serif;
   color: var(--tone);
 }
@@ -114,12 +114,19 @@
   gap: 16px;
   align-items: center;
   justify-content: space-between;
-  min-height: 104px;
+  min-height: 64px;
   filter: var(--glare);
+}
+.ds-order-summary dd {
+  flex: none;
+  font: 700 16px/24px Poppins, sans-serif;
 }
 .ds-order-summary > div:last-child {
   font-size: 30px;
   line-height: 36px;
+}
+.ds-order-summary > div:last-child dd {
+  font: inherit;
 }
 .ds-payment {
   width: 100%;
@@ -131,7 +138,7 @@
   display: flex;
   gap: 30px;
   align-items: center;
-  padding: 16px 30px;
+  padding: 16px 20px;
   cursor: pointer;
 }
 .ds-radio-slot {
@@ -167,9 +174,7 @@
   opacity: 0.4;
 }
 .ds-card-fields {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0;
-  padding-inline: 18px;
+  gap: 30px 20px;
 }
 .ds-card-fields .ds-field {
   min-height: 0;
@@ -183,6 +188,7 @@
 }
 .ds-checkout-order .ds-checkout-actions {
   justify-content: flex-start;
+  flex-wrap: wrap;
   padding-inline: 20px;
 }
 .ds-thankyou {
@@ -191,14 +197,14 @@
 }
 .ds-thankyou-card {
   --panel-stroke: 6px;
-  width: 1296px;
+  width: 723px;
   max-width: 100%;
   min-height: 878px;
   padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 40px;
 }
 .ds-thankyou-card header {
@@ -218,7 +224,7 @@
   display: grid;
   gap: 48px;
   align-content: start;
-  padding: 20px 40px;
+  padding: 20px clamp(8px, 1.3vw, 20px);
 }
 .ds-confirmation-notice {
   max-width: 896px;

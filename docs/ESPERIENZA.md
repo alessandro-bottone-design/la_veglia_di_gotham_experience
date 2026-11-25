@@ -1,6 +1,6 @@
 # Guida all’esperienza
 
-[Indice del progetto](../README.md) · [Dossier di progetto](DOCUMENTAZIONE_PROGETTO.md)
+[Indice del progetto](../README.md) · [Dossier di progetto](DOCUMENTAZIONE_PROGETTO.md) · [Copy ufficiale](../LA_VEGLIA_DI_GOTHAM_COPY_SITO.md)
 
 ## Accesso e comandi
 
@@ -16,13 +16,13 @@ Apri il sito in un browser desktop con mouse o tastiera. L’esperienza mostra u
 | Rotella, trackpad o scorrimento da tastiera | Percorrono avanti o indietro lo showreel. |
 | Pulsante audio | Attiva o silenzia musica ed effetti. L’audio può richiedere una prima interazione perché il browser ne consenta la riproduzione. |
 
-La pausa è disponibile nelle fasi introduttive e nella missione. Nello showreel, nel checkout e nella conferma resta disponibile il comando audio.
+La pausa è disponibile nelle fasi introduttive, nella missione, durante i passaggi tra le aree e nelle schermate di esito. Nello showreel, nel checkout e nella conferma resta disponibile il comando audio.
 
 ## Dalla carta del Joker alla statua
 
-1. In home scegli **Inizia la missione**. Apri il reperto del Joker per rivelare il messaggio sul retro e premi **Accetta la sfida**.
-2. Leggi le quattro schede del tutorial. L’ultima avvia la missione.
-3. Cerca due inviti al Batcomputer, uno in Armeria e due al Batmobile. Seleziona un invito per esaminare la carta al centro. Le risposte errate permettono di riprovare. Una risposta corretta fa arrivare la carta alla barra **Indizi raccolti**. Gli aiuti del Joker intervengono quando la ricerca si prolunga.
+1. In home scegli **Entra nella Batcaverna**. Seleziona **Gira la carta** per rivelare il messaggio sul retro e premi **Accetta la sfida**.
+2. Leggi le quattro schede del tutorial e poi premi **Inizia la missione**.
+3. Cerca due carte al Batcomputer, una in Armeria e due al Batmobile. Seleziona una carta per leggere l’enigma al centro. Puoi riprovare dopo una risposta errata. Una risposta corretta fa arrivare la carta alla barra **INDIZI RACCOLTI**. Gli aiuti del Joker indicano la carta da cercare se la ricerca si prolunga.
 4. Il timer parte da tre minuti di gioco effettivo. Il caricamento, la pausa, la raccolta di un indizio e i filmati di passaggio sospendono il conto alla rovescia. I filmati si possono saltare. Risolvere i primi due indizi entro 45 secondi di gioco assegna una sola volta 60 secondi aggiuntivi.
 5. Al quinto indizio, **Scopri la statua** porta allo showreel. Se il tempo termina, **Riprova la missione** riporta alla schermata iniziale.
 
@@ -34,23 +34,23 @@ Lo scroll pilota una sequenza di immagini. La superficie resta centrata a scherm
 
 | Contenuto | Entrata | Piena visibilità | Uscita |
 | --- | --- | --- | --- |
-| Presenza leggendaria | 3–7% | 7–24% | 24–29% |
-| Materiali d’élite | 34–38% | 38–54% | 54–59% |
-| Scultura di precisione | 65–69% | 69–84% | 84–89% |
-| L’eredità è tua | 93–97% | 97–100% | — |
+| Bronzo a cera persa | 3–7% | 7–24% | 24–29% |
+| La posa sul gargoyle | 34–38% | 38–54% | 54–59% |
+| Patina bruna | 65–69% | 69–84% | 84–89% |
+| La veglia di Gotham | 93–97% | 97–100% | — |
 
-Le percentuali si riferiscono alla corsa di scroll dello showreel. Le dissolvenze si invertono risalendo e, nelle pause tra i contenuti, rimane la sequenza. Il pulsante di preordine è sempre disponibile nella navbar. Nel finale diventa attivo quando la dissolvenza è completa. Con la preferenza di sistema per il movimento ridotto lo showreel mostra il fotogramma finale statico e il preordine subito disponibile.
+Le percentuali si riferiscono alla corsa di scroll dello showreel. Le dissolvenze si invertono risalendo e tra una card e l’altra si vede la sequenza. **Preordina la statua** è sempre disponibile nella navbar. Nel finale diventa attivo quando il media è pronto e la dissolvenza è completa. Con movimento ridotto lo showreel mostra il fotogramma finale statico e rende subito disponibile il preordine. I testi delle tre card sono accessibili al lettore di schermo anche nella versione statica.
 
 ## Checkout dimostrativo
 
-Da **Preordina il Cavaliere** o `/#checkout` si accede ai quattro passaggi del preordine dimostrativo. Usa la freccia a schermo, **→** o **Spazio** per avanzare anche a tappa vuota. Se inizi a compilare una tappa, il browser convalida i campi richiesti.
+Da **Preordina la statua** o `/#checkout` si accede ai quattro passaggi del preordine dimostrativo. Usa i pulsanti a schermo oppure **←** e **→** per cambiare tappa quando il focus è fuori dai campi. **Spazio** avanza dal titolo della tappa.
 
-1. **Dati personali** mostra i campi per telefono, nome, email, data di nascita e password di prova.
-2. **Dati di spedizione** mostra regione, provincia, città, CAP e indirizzo.
-3. **Metodo di pagamento** mostra PayPal e carta dimostrativa. Se scegli carta, compila intestatario, numero, scadenza e CVV fittizi.
-4. In **Ordine** verifica il riepilogo. Una statua da 700 € più 50 € di spedizione dà un totale dimostrativo di 750 €.
+1. **Dati personali** mostra telefono, nome, email, data di nascita e password mascherata di Bruce Wayne. I campi sono già compilati e in sola lettura.
+2. **Dati di spedizione** mostra regione, provincia, città, CAP e indirizzo di esempio, sempre in sola lettura.
+3. **Metodo di pagamento** propone **PayPal** come prima scelta. Seleziona **Carta di credito o debito** per vedere l’intestatario di esempio, il numero parzialmente mascherato, la scadenza e il CVV mascherati.
+4. In **Riepilogo** verifica il totale di **12.900 €**, con trasporto incluso, e premi **Conferma il preordine**.
 
-Il browser simula l’elaborazione e mantiene i dati del modulo in memoria. La pagina `/#conferma` mostra un riepilogo di esempio dopo il checkout. Se viene aperta direttamente o ricaricata, senza un ordine in memoria riporta allo showreel.
+Il browser simula l’elaborazione e conserva l’ordine demo in memoria. La pagina `/#conferma` mostra il numero di esempio `ord-bw-4019`, una statua e la consegna **Da concordare**. Se apri o ricarichi `/#conferma` senza un ordine in memoria, torni allo showreel. **Torna alla home** chiude il percorso.
 
 ## Recupero
 

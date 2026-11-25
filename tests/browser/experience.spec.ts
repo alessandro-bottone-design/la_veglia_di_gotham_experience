@@ -6,26 +6,26 @@ test.beforeEach(async ({ page }) => {
 async function enterStory(page: Page) {
   await page.goto("/");
   await page
-    .getByRole("button", { name: "INIZIA LA MISSIONE", exact: true })
+    .getByRole("button", { name: "Entra nella Batcaverna", exact: true })
     .click();
 }
 async function enterTutorial(page: Page) {
   await enterStory(page);
   await page
     .getByRole("button", {
-      name: "Interagisci con il reperto per decifrare il messaggio",
+      name: "Gira la carta",
       exact: true,
     })
     .click();
   await page
-    .getByRole("button", { name: "ACCETTA LA SFIDA", exact: true })
+    .getByRole("button", { name: "Accetta la sfida", exact: true })
     .click();
 }
 async function beginMission(page: Page) {
   const next = page.getByRole("button", { name: "Istruzione successiva" });
   for (let i = 0; i < 3; i++) await next.click();
   await page
-    .getByRole("button", { name: "INIZIA LA MISSIONE", exact: true })
+    .getByRole("button", { name: "Inizia la missione", exact: true })
     .click();
 }
 async function start(page: Page, reduced = true) {
@@ -63,46 +63,18 @@ async function answer(page: Page, id: number, response: string) {
     timeout: 45000,
   });
 }
-async function fillFields(page: Page, fields: Record<string, string>) {
-  for (const [name, value] of Object.entries(fields)) {
-    await page.locator('[name="' + name + '"]').fill(value);
-  }
-}
-const PERSONAL = {
-  phone: "+39 3330000000",
-  fullName: "Bruce Demo",
-  email: "demo@example.com",
-  birthDate: "01/01/1990",
-  password: "fittizia",
-};
-const SHIPPING = {
-  region: "Campania",
-  provincia: "NA",
-  city: "Napoli",
-  cap: "80125",
-  address: "Via Demo 15",
-};
-const CARD = {
-  cardOwner: "Bruce Demo",
-  cardNumber: "4242 4242 4242 4242",
-  cardExpiry: "12/30",
-  cardCvv: "123",
-};
+const checkoutFieldNames = [
+  "phone", "fullName", "email", "birthDate", "password",
+  "region", "provincia", "city", "cap", "address",
+  "cardOwner", "cardNumber", "cardExpiry", "cardCvv",
+];
 function observeCheckoutRequests(page: Page) {
   const requests: Request[] = [];
   page.on("request", (request) => requests.push(request));
   return requests;
 }
 async function expectLocalCheckout(page: Page, requests: Request[]) {
-  const fieldNames = Object.keys({ ...PERSONAL, ...SHIPPING, ...CARD });
-  const sampleValues = [
-    PERSONAL.fullName,
-    PERSONAL.email,
-    PERSONAL.password,
-    SHIPPING.address,
-    CARD.cardNumber,
-    CARD.cardNumber.replaceAll(" ", ""),
-  ];
+  const sampleValues = ["Bruce Wayne", "bruce.wayne@", "4242"];
   const outgoingData = requests
     .filter((request) => {
       const url = new URL(request.url());
@@ -111,7 +83,7 @@ async function expectLocalCheckout(page: Page, requests: Request[]) {
       return (
         !["GET", "HEAD"].includes(request.method()) ||
         request.postData() !== null ||
-        fieldNames.some((name) => url.searchParams.has(name)) ||
+        checkoutFieldNames.some((name) => url.searchParams.has(name)) ||
         sampleValues.some((value) => address.includes(value))
       );
     })
@@ -122,19 +94,16 @@ async function expectLocalCheckout(page: Page, requests: Request[]) {
     await page.evaluate(() => [localStorage.length, sessionStorage.length]),
   ).toEqual([0, 0]);
 }
-async function fill(page: Page, card = false) {
+async function reachOrderSummary(page: Page, card = false) {
   const next = page.getByRole("button", { name: "Tappa successiva" });
-  await fillFields(page, PERSONAL);
   await next.click();
-  await fillFields(page, SHIPPING);
   await next.click();
   await page
     .getByRole("radio", {
-      name: card ? "CARTA DI CREDITO O DEBITO" : "PAYPAL",
+      name: card ? "Carta di credito o debito" : "PayPal",
       exact: true,
     })
     .check();
-  if (card) await fillFields(page, CARD);
   await next.click();
 }
 const BATCOMPUTER_VIDEO = "/assets/textures/BatCaverna_Batcomputer360.mp4";
@@ -152,7 +121,7 @@ test("official start has original assets, tokens and an inert decorative video",
   });
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "BATMAN STATUE EXPERIENCE" }),
+    page.getByRole("heading", { name: "La Veglia di Gotham" }),
   ).toBeVisible();
   await expect(page.locator("nav").getByRole("button")).toHaveCount(2);
   await expect(page.locator(".ds-start-title")).toHaveCSS(
@@ -206,7 +175,7 @@ test("storytelling flips the Joker relic card, hides the guide subtitle and adva
 }) => {
   await page.goto("/");
   await page
-    .getByRole("button", { name: "INIZIA LA MISSIONE", exact: true })
+    .getByRole("button", { name: "Entra nella Batcaverna", exact: true })
     .click();
   await expect(page.getByRole("progressbar")).toHaveCount(0);
   await expect(backdrop(page).locator("video")).toHaveAttribute(
@@ -216,7 +185,7 @@ test("storytelling flips the Joker relic card, hides the guide subtitle and adva
   const card = page.locator(".ds-story-card");
   await expect(card).toHaveAttribute("data-face", "front");
   await expect(page.getByRole("heading")).toContainText(
-    "INTERAGISCI CON IL REPERTO",
+    "Gira la carta",
   );
   await page.getByRole("button", { name: "Metti in pausa esperienza" }).click();
   await expect(
@@ -226,19 +195,19 @@ test("storytelling flips the Joker relic card, hides the guide subtitle and adva
   await expect(card).toHaveAttribute("data-face", "front");
   await page
     .getByRole("button", {
-      name: "Interagisci con il reperto per decifrare il messaggio",
+      name: "Gira la carta",
       exact: true,
     })
     .click();
   await expect(card).toHaveAttribute("data-face", "back");
   await expect(
-    page.getByRole("heading", { name: /INTERAGISCI CON IL REPERTO/ }),
+    page.getByRole("heading", { name: /Gira la carta/ }),
   ).toHaveCount(0);
   await expect(page.locator(".ds-story-card-body")).toContainText(
-    "Batman... Ho lasciato un regalino",
+    "Benvenuto al tuo spettacolo, Batman.",
   );
   const accept = page.getByRole("button", {
-    name: "ACCETTA LA SFIDA",
+    name: "Accetta la sfida",
     exact: true,
   });
   await expect(accept).toBeVisible();
@@ -256,11 +225,11 @@ test("storytelling flips the Joker relic card, hides the guide subtitle and adva
   }).toBe(true);
   await accept.click();
   await expect(
-    page.getByRole("heading", { name: "BATTI IL TEMPO" }),
+    page.getByRole("heading", { name: "Tre minuti" }),
   ).toBeVisible();
   await enterTutorial(page);
   await expect(
-    page.getByRole("heading", { name: "BATTI IL TEMPO" }),
+    page.getByRole("heading", { name: "Tre minuti" }),
   ).toBeVisible();
 });
 test("tutorial uses the four official steps and the mission HUD", async ({
@@ -277,26 +246,33 @@ test("tutorial uses the four official steps and the mission HUD", async ({
     "0",
   );
   await expect(
-    page.getByRole("heading", { name: "BATTI IL TEMPO" }),
+    page.getByRole("heading", { name: "Tre minuti" }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Istruzione precedente" }),
-  ).toBeDisabled();
+  const previous = page.getByRole("button", { name: "Istruzione precedente" });
+  const next = page.getByRole("button", { name: "Istruzione successiva" });
+  const startMission = page.getByRole("button", { name: "Inizia la missione" });
+  await expect(previous).toHaveCount(0);
   for (const title of [
-    "RISOLVI GLI ENIGMI",
-    "TROVA TUTTI GLI INDIZI",
-    "ESPLORA L’AMBIENTE",
+    "Risolvi gli enigmi",
+    "Trova le cinque carte",
+    "Guardati intorno",
   ]) {
-    await page.getByRole("button", { name: "Istruzione successiva" }).click();
+    await next.press("Enter");
+    await expect(page.getByRole("heading", { name: title })).toBeVisible();
+    await expect(previous).toBeVisible();
+  }
+  await expect(next).toHaveCount(0);
+  await expect(startMission).toBeFocused();
+  for (const title of [
+    "Trova le cinque carte",
+    "Risolvi gli enigmi",
+    "Tre minuti",
+  ]) {
+    await previous.press("Enter");
     await expect(page.getByRole("heading", { name: title })).toBeVisible();
   }
-  await expect(
-    page.getByRole("button", { name: "INIZIA LA MISSIONE" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Istruzione precedente" }).click();
-  await expect(
-    page.getByRole("heading", { name: "TROVA TUTTI GLI INDIZI" }),
-  ).toBeVisible();
+  await expect(previous).toHaveCount(0);
+  await expect(next).toBeFocused();
 });
 test("keyboard mission inspects cards, supports wrong answers and escape, then wins", async ({
   page,
@@ -346,17 +322,17 @@ test("keyboard mission inspects cards, supports wrong answers and escape, then w
     page.getByText(/SPEEDRUN|Premio demo|Bonus esplorazione/),
   ).toHaveCount(0);
   await page.screenshot({ path: test.info().outputPath("win.png") });
-  await page.getByRole("button", { name: "SCOPRI LA STATUA" }).click();
+  await page.getByRole("button", { name: "Scopri la statua" }).click();
   await expect(
-    page.getByRole("heading", { name: "L’EREDITÀ È TUA" }),
+    page.getByRole("heading", { name: "La veglia di Gotham" }),
   ).toBeVisible();
   await expect(backdrop(page)).toHaveCount(0);
   await page
     .locator("nav")
-    .getByRole("button", { name: "PREORDINA IL CAVALIERE" })
+    .getByRole("button", { name: "Preordina la statua" })
     .click();
   await expect(
-    page.getByRole("heading", { name: "DATI PERSONALI" }),
+    page.getByRole("heading", { name: "Dati personali" }),
   ).toBeVisible();
 });
 test("correct feedback survives pause and early clues retain the hidden time bonus", async ({
@@ -373,6 +349,10 @@ test("correct feedback survives pause and early clues retain the hidden time bon
   ).toBeVisible();
   await page.getByRole("button", { name: "Metti in pausa esperienza" }).click();
   await page.clock.runFor(1100);
+  const pausedClue = page.locator(".ds-inspection");
+  await expect(pausedClue).toHaveAttribute("data-stage", "confirming");
+  await expect(pausedClue.getByText("RISPOSTA CORRETTA")).toBeVisible();
+  await expect(pausedClue.getByRole("button")).toHaveCount(0);
   await expect(page.locator("nav [role=progressbar]")).toHaveAttribute(
     "aria-valuenow",
     "0",
@@ -510,7 +490,7 @@ test("mouse mission discovers hidden cards and collects them through the HUD", a
       await expect(
         page.getByText("TRANSIZIONE ALLA PROSSIMA AREA", { exact: true }),
       ).toHaveCount(0);
-      await page.getByRole("button", { name: "SALTA LA TRANSIZIONE" }).click();
+      await page.getByRole("button", { name: "Vai alla prossima area" }).click();
     }
   }
   await expect(
@@ -519,52 +499,64 @@ test("mouse mission discovers hidden cards and collects them through the HUD", a
   expect(await counts.jsonValue()).toEqual(["1", "2", "3", "4", "5"]);
   await counts.dispose();
 });
-test("checkout validates each Figma step, keeps entered values and displays the demo total", async ({
-  page,
-}) => {
+test("checkout shows Bruce Wayne’s read-only details and the transport-inclusive total", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1060 });
   await page.goto("/#checkout");
-  await expect(page.getByText(/Preordine dimostrativo/)).toBeVisible();
-  await expect(backdrop(page).locator("video")).toHaveAttribute(
-    "src",
-    BATCOMPUTER_VIDEO,
-  );
+  await expect(page.getByText(/simulazion|dimostrativ/i)).toHaveCount(0);
+  await expect(backdrop(page).locator("video")).toHaveAttribute("src", BATCOMPUTER_VIDEO);
   const next = page.getByRole("button", { name: "Tappa successiva" });
   const back = page.getByRole("button", { name: "Tappa precedente" });
-  await expect(page.locator("input")).toHaveCount(5);
-  await expect(page.locator("[name=email]")).toHaveValue("");
-  await page.locator("[name=email]").fill("indirizzo-incompleto");
-  await page.keyboard.press("ArrowRight");
-  await expect(
-    page.getByRole("heading", { name: "DATI PERSONALI" }),
-  ).toBeVisible();
+  const readOnlyFields = page.locator("input[readonly]");
+  await expect(readOnlyFields).toHaveCount(5);
+  await expect(page.locator("[name=fullName]")).toHaveValue("Bruce Wayne");
+  const email = page.locator("[name=email]");
+  await expect(email).not.toBeEditable();
+  const addressEmail = "bruce.wayne@example.com";
+  await expect(email).toHaveValue(addressEmail);
+  await expect(page.getByRole("textbox", { name: "Password" })).toHaveValue(
+    "••••••••",
+  );
   await next.click();
-  await expect(page.locator("[aria-invalid=true]")).toHaveCount(5);
-  await expect(page.locator("[name=phone]")).toBeFocused();
-  await fillFields(page, PERSONAL);
-  await next.click();
-  await expect(
-    page.getByRole("heading", { name: "DATI DI SPEDIZIONE" }),
-  ).toBeFocused();
-  await fillFields(page, SHIPPING);
+  await expect(page.getByRole("heading", { name: "Dati di spedizione" })).toBeFocused();
+  await expect(readOnlyFields).toHaveCount(5);
+  await expect(page.getByRole("textbox", { name: "Indirizzo" })).toHaveValue(
+    "Villa Wayne, 1",
+  );
   await back.click();
-  await expect(page.locator("[name=email]")).toHaveValue(PERSONAL.email);
+  await expect(email).toHaveValue(addressEmail);
   await next.click();
-  await expect(page.locator("[name=address]")).toHaveValue(SHIPPING.address);
   await next.click();
-  await page.getByRole("radio", { name: "CARTA DI CREDITO O DEBITO" }).check();
-  await expect(page.locator("input:not([type=radio])")).toHaveCount(4);
-  await next.click();
-  await expect(page.locator("[name=cardOwner]")).toBeFocused();
-  await page.getByRole("radio", { name: "PAYPAL", exact: true }).check();
+
+  const card = page.getByRole("radio", { name: "Carta di credito o debito" });
+  const paypal = page.getByRole("radio", { name: "PayPal", exact: true });
+  await expect(paypal).toBeChecked();
+  await expect(readOnlyFields).toHaveCount(0);
+  await paypal.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(card).toBeChecked();
+  await expect(card).toBeFocused();
+  await expect(readOnlyFields).toHaveCount(4);
+  await expect(page.getByRole("textbox", { name: "Numero carta" })).toHaveValue(
+    "•••• •••• •••• 4242",
+  );
+  const cardFields = page.locator(".ds-card-fields");
+  await expect(cardFields).toHaveCSS("grid-template-columns", "351.5px 351.5px");
+  await expect(next).toBeInViewport();
+  await page.setViewportSize({ width: 520, height: 740 });
+  await expect(cardFields).toHaveCSS("grid-template-columns", /^\d+(?:[.]\d+)?px$/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(520);
+  await page.keyboard.press("ArrowLeft");
+  await expect(paypal).toBeChecked();
   await expect(page.locator("[name=cardNumber]")).toHaveCount(0);
   await next.click();
-  await expect(page.getByText("750€", { exact: true })).toBeVisible();
+  await expect(page.getByText("La veglia di Gotham", { exact: true })).toBeVisible();
+  await expect(page.locator(".ds-order-summary").getByText("Incluso", { exact: true })).toBeVisible();
   await expect(
-    page.locator("input[name=quantity],input[name=promo]"),
-  ).toHaveCount(0);
+    page.locator(".ds-order-summary").getByText("12.900 €", { exact: true }),
+  ).toHaveCount(2);
 });
 for (const interaction of ["mouse", "keyboard"]) {
-  test(`blank checkout reaches the local confirmation by ${interaction}`, async ({
+  test(`pre-filled checkout reaches the local confirmation by ${interaction}`, async ({
     page,
   }) => {
     const requests = observeCheckoutRequests(page);
@@ -572,30 +564,31 @@ for (const interaction of ["mouse", "keyboard"]) {
     await page.goto("/#checkout");
     const next = page.getByRole("button", { name: "Tappa successiva" });
     const back = page.getByRole("button", { name: "Tappa precedente" });
-    const confirm = page.getByRole("button", { name: "CHECKOUT", exact: true });
+    const confirm = page.getByRole("button", { name: "Conferma il preordine", exact: true });
     const heading = (name: string) =>
       page.getByRole("heading", { name, exact: true });
     const advance = async (key = "ArrowRight") => {
       if (interaction === "mouse") await next.click();
       else await page.keyboard.press(key);
     };
-    await expect(heading("DATI PERSONALI")).toBeFocused();
+    await expect(heading("Dati personali")).toBeFocused();
     await advance("Space");
-    await expect(heading("DATI DI SPEDIZIONE")).toBeFocused();
+    await expect(heading("Dati di spedizione")).toBeFocused();
     if (interaction === "mouse") await back.click();
     else await page.keyboard.press("ArrowLeft");
-    await expect(heading("DATI PERSONALI")).toBeFocused();
+    await expect(heading("Dati personali")).toBeFocused();
     await advance();
     await advance();
-    await expect(heading("METODO DI PAGAMENTO")).toBeFocused();
+    await expect(heading("Metodo di pagamento")).toBeFocused();
     await advance("Space");
-    await expect(heading("ORDINE")).toBeFocused();
-    await expect(page.getByText("750€", { exact: true })).toBeVisible();
+    await expect(heading("Riepilogo")).toBeFocused();
+    await expect(page.getByText("12.900 €", { exact: true }).last()).toBeVisible();
     if (interaction === "mouse") await confirm.click();
     else await page.keyboard.press("Space");
     await expect(confirm).toBeDisabled();
-    await expect(heading("ACQUISTO ANDATO A BUON FINE")).toBeVisible();
+    await expect(heading("Preordine confermato")).toBeVisible();
     await expect(page).toHaveURL(/#conferma$/);
+    await expect(page.locator("main")).toBeFocused();
     await expectLocalCheckout(page, requests);
   });
 }
@@ -604,12 +597,15 @@ test("valid PayPal demo creates only a local guarded confirmation", async ({
 }) => {
   const requests = observeCheckoutRequests(page);
   await page.goto("/#checkout");
-  await fill(page);
-  await page.getByRole("button", { name: "CHECKOUT", exact: true }).click();
+  await reachOrderSummary(page);
+  await page.getByRole("button", { name: "Conferma il preordine", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "ACQUISTO ANDATO A BUON FINE" }),
+    page.getByRole("heading", { name: "Preordine confermato" }),
   ).toBeVisible();
-  await expect(page.getByText("x1", { exact: true })).toBeVisible();
+  await expect(page.getByText("La veglia di Gotham", { exact: true })).toBeVisible();
+  await expect(page.getByText("12.900 €", { exact: true })).toBeVisible();
+  await expect(page.getByText("ord-bw-4019", { exact: true })).toBeVisible();
+  await expect(page.getByText("Da concordare", { exact: true })).toBeVisible();
   await expect(backdrop(page).locator("video")).toHaveAttribute(
     "src",
     BATCOMPUTER_VIDEO,
@@ -623,24 +619,24 @@ test("card demo prevents duplicate submissions and never sends form data", async
 }) => {
   const requests = observeCheckoutRequests(page);
   await page.goto("/#checkout");
-  await fill(page, true);
+  await reachOrderSummary(page, true);
   const history = await page.evaluate(() => window.history.length);
-  await page.getByRole("button", { name: "CHECKOUT", exact: true }).click();
+  await page.getByRole("button", { name: "Conferma il preordine", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "CHECKOUT", exact: true }),
+    page.getByRole("button", { name: "Conferma il preordine", exact: true }),
   ).toBeDisabled();
   await page.locator("form").evaluate((el) => {
     (el as HTMLFormElement).requestSubmit();
     (el as HTMLFormElement).requestSubmit();
   });
   await expect(
-    page.getByRole("heading", { name: "ACQUISTO ANDATO A BUON FINE" }),
+    page.getByRole("heading", { name: "Preordine confermato" }),
   ).toBeVisible();
   expect(await page.evaluate(() => window.history.length)).toBe(history + 1);
   await expectLocalCheckout(page, requests);
-  await page.getByRole("button", { name: "TORNA ALLA HOME" }).click();
+  await page.getByRole("button", { name: "Torna alla home" }).click();
   await expect(
-    page.getByRole("heading", { name: "BATMAN STATUE EXPERIENCE" }),
+    page.getByRole("heading", { name: "La Veglia di Gotham" }),
   ).toBeVisible();
 });
 test("leaving checkout during processing cancels late confirmation", async ({
@@ -650,15 +646,15 @@ test("leaving checkout during processing cancels late confirmation", async ({
   await page.goto("/#statua");
   await page
     .locator("nav")
-    .getByRole("button", { name: "PREORDINA IL CAVALIERE" })
+    .getByRole("button", { name: "Preordina la statua" })
     .click();
-  await fill(page);
-  await page.getByRole("button", { name: "CHECKOUT", exact: true }).click();
+  await reachOrderSummary(page);
+  await page.getByRole("button", { name: "Conferma il preordine", exact: true }).click();
   await page.goBack();
   await page.waitForTimeout(4500);
   await expect(page).toHaveURL(/#statua$/);
   await expect(
-    page.getByRole("heading", { name: "ACQUISTO ANDATO A BUON FINE" }),
+    page.getByRole("heading", { name: "Preordine confermato" }),
   ).toHaveCount(0);
 });
 test("phones and touch tablets load only the static perspective background", async ({
@@ -693,7 +689,7 @@ test("phones and touch tablets load only the static perspective background", asy
       (process.env.BASE_URL || "http://127.0.0.1:4173") + "/#checkout",
     );
     await expect(
-      page.getByRole("heading", { name: "DISPOSITIVO NON COMPATIBILE" }),
+      page.getByRole("heading", { name: "Apri il sito da computer" }),
     ).toBeVisible();
     await expect(page.locator("button,nav,canvas,audio,video")).toHaveCount(0);
     await expect(page.locator(".ds-logos img")).toHaveCount(3);
@@ -742,9 +738,11 @@ test("showreel paints without scrolling, bounds requests and recovers after miss
     );
   const overlays = page.locator(".ds-showreel-overlay:visible");
   const canvas = page.locator(".statue-stage canvas");
-  const firstCard = page.locator('[data-figma-node="357:3646"]');
+  const firstCard = page.locator(".ds-showreel-overlay").filter({
+    hasText: "Bronzo a cera persa",
+  });
   const finalButton = page.locator("main").getByRole("button", {
-    name: "PREORDINA IL CAVALIERE",
+    name: "Preordina la statua",
   });
   const contentViewport = () =>
     page.evaluate(() => ({
@@ -765,6 +763,7 @@ test("showreel paints without scrolling, bounds requests and recovers after miss
   await expect.poll(firstOpacity).toBeCloseTo(0.5, 1);
   await scrollToProgress(0.12);
   await expect(firstCard).toHaveCSS("opacity", "1");
+  await expect(page.getByRole("heading", { name: "Bronzo a cera persa" })).toBeVisible();
   await expect(page.locator(".ds-showreel-right:visible .ds-showreel-card")).toHaveCount(1);
   await scrollToProgress(0.265);
   await expect.poll(firstOpacity).toBeCloseTo(0.5, 1);
@@ -776,7 +775,7 @@ test("showreel paints without scrolling, bounds requests and recovers after miss
   await expect(firstCard).toHaveCSS("opacity", "1");
 
   await scrollToProgress(0.4);
-  await expect(page.getByRole("heading", { name: "MATERIALI D’ELITE" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "La posa sul gargoyle" })).toBeVisible();
   await expect(page.locator(".ds-showreel-left:visible .ds-showreel-card")).toHaveCount(1);
   await expectVideoToFillViewport();
 
@@ -784,7 +783,7 @@ test("showreel paints without scrolling, bounds requests and recovers after miss
   await scrollToProgress(0.62);
   await expect(overlays).toHaveCount(0);
   await scrollToProgress(0.72);
-  await expect(page.getByRole("heading", { name: "SCULTURA DI PRECISIONE" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Patina bruna" })).toBeVisible();
   await expectVideoToFillViewport();
   const narrowCard = await page
     .locator(".ds-showreel-overlay:visible .ds-showreel-card")
@@ -805,19 +804,25 @@ test("showreel paints without scrolling, bounds requests and recovers after miss
   await expect(firstCard).toHaveCSS("opacity", "1");
   await scrollToProgress(1);
   await expect(finalButton).toBeEnabled();
+  await expect(page.getByRole("heading", { name: "La veglia di Gotham" })).toBeInViewport();
+  await expect(page.getByText("Statua di Batman in bronzo, scala 1:1")).toBeInViewport();
+  await expect(page.getByText("180 × 130 × 135 cm circa (A × L × P), base inclusa")).toBeInViewport();
   await expectVideoToFillViewport();
   await expect(page.locator("footer,.gallery-options")).toHaveCount(0);
   await finalButton.focus();
   await expect(finalButton).toBeFocused();
   await finalButton.press("Enter");
   await expect(page).toHaveURL(/#checkout$/);
+  await expect(
+    page.getByRole("heading", { name: "Dati personali", exact: true }),
+  ).toBeFocused();
 });
 test("complete image failure keeps recoverable provisional state", async ({
   page,
 }) => {
   await page.route("**/assets/showreel/*.webp", (r) => r.abort());
   await page.goto("/#statua");
-  await expect(page.getByText(/Sequenza non disponibile/)).toBeVisible();
+  await expect(page.getByText(/Il browser non riesce a caricare le immagini della statua/)).toBeVisible();
   await page.unroute("**/assets/showreel/*.webp");
   await page.getByRole("button", { name: "Riprova", exact: true }).click();
   await expect(page.locator(".statue-loading")).toHaveCount(0);
@@ -844,7 +849,7 @@ test("WebGL denial freezes mission time and offers the existing recovery path", 
   await expect(backdrop(page).locator("canvas")).toBeHidden();
   await beginMission(page);
   await expect(
-    page.getByRole("heading", { name: "La Batcaverna non è disponibile." }),
+    page.getByRole("heading", { name: "La Batcaverna non si apre" }),
   ).toBeVisible();
   await expect(page.locator("nav [role=timer]")).toHaveText("03.00");
   await page.waitForTimeout(1200);
@@ -864,7 +869,7 @@ test("failed videos fall back to images and transitions can continue", async ({
     await answer(page, id, responses[id - 1]);
     if (id === 2 || id === 3)
       await page
-        .getByRole("button", { name: "SALTA LA TRANSIZIONE" })
+        .getByRole("button", { name: "Vai alla prossima area" })
         .click();
   }
   await expect(
@@ -912,19 +917,28 @@ test("hint, pause and failure use active mission time without added badges", asy
   await page.clock.fastForward(61000);
   await expect(page.locator(".ds-clue-hint")).toHaveCount(1);
   await page.getByRole("button", { name: "Metti in pausa esperienza" }).click();
-  await expect(backdrop(page)).toHaveCSS("z-index", "100");
+  await expect(backdrop(page)).toHaveCount(0);
+  await expect(page.locator(".panorama-scene canvas")).toBeVisible();
+  const overlay = page.locator(".ds-pause");
+  expect(await overlay.boundingBox()).toEqual({
+    x: 0,
+    y: 0,
+    ...page.viewportSize(),
+  });
+  const expectedColor = await overlay.evaluate((el) => {
+    const swatch = document.createElement("div");
+    swatch.style.backgroundColor = "color-mix(in srgb, #010013 40%, transparent)";
+    el.append(swatch);
+    const color = getComputedStyle(swatch).backgroundColor;
+    swatch.remove();
+    return color;
+  });
+  await expect(overlay).toHaveCSS("background-color", expectedColor);
   const pauseTitle = page.getByRole("heading", { name: "MISSIONE IN PAUSA" });
   expect(
     await pauseTitle.evaluate((title) => {
-      const background =
-        document.querySelector<HTMLElement>(".batcave-backdrop")!;
-      // Include the decorative layer in the hit test to check the paint order.
-      background.inert = false;
-      background.style.pointerEvents = "auto";
       const { x, y, width, height } = title.getBoundingClientRect();
       const top = document.elementFromPoint(x + width / 2, y + height / 2);
-      background.style.removeProperty("pointer-events");
-      background.inert = true;
       return Boolean(top?.closest(".ds-pause"));
     }),
   ).toBe(true);
@@ -943,12 +957,12 @@ test("hint, pause and failure use active mission time without added badges", asy
   await expect(
     page.locator("nav [role=timer],nav [role=progressbar]"),
   ).toHaveCount(0);
-  await page.getByRole("button", { name: "RIPROVA LA MISSIONE" }).click();
+  await page.getByRole("button", { name: "Riprova la missione" }).click();
   await expect(
-    page.getByRole("heading", { name: "BATMAN STATUE EXPERIENCE" }),
+    page.getByRole("heading", { name: "La Veglia di Gotham" }),
   ).toBeVisible();
 });
-test("short desktop and zoom equivalent allow tutorial, in-world answers and checkout", async ({
+test("short desktop and zoom equivalent allow tutorial, in-world answers, checkout and static showreel", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 720, height: 450 });
@@ -960,16 +974,22 @@ test("short desktop and zoom equivalent allow tutorial, in-world answers and che
     ),
   ).toBe(true);
   await page.goto("/#checkout");
-  await fill(page);
-  await page.getByRole("button", { name: "CHECKOUT", exact: true }).click();
+  await reachOrderSummary(page);
+  await page.getByRole("button", { name: "Conferma il preordine", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "ACQUISTO ANDATO A BUON FINE" }),
+    page.getByRole("heading", { name: "Preordine confermato" }),
   ).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await page.goto("/#statua");
+  await expect(page.locator(".statue-loading")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "La veglia di Gotham" })).toBeInViewport();
+  await expect(page.getByText("Statua di Batman in bronzo, scala 1:1")).toBeInViewport();
+  await expect(page.getByText("180 × 130 × 135 cm circa (A × L × P), base inclusa")).toBeInViewport();
+  await expect(page.locator("main").getByRole("button", { name: "Preordina la statua" })).toBeInViewport();
 });
 test("axe checks official start, tutorial, checkout, confirmation and static showreel", async ({
   page,
@@ -979,32 +999,43 @@ test("axe checks official start, tutorial, checkout, confirmation and static sho
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page.goto("/");
   await check();
-  await page.getByRole("button", { name: "INIZIA LA MISSIONE" }).click();
+  await page.getByRole("button", { name: "Entra nella Batcaverna" }).click();
   await check();
   await page
     .getByRole("button", {
-      name: "Interagisci con il reperto per decifrare il messaggio",
+      name: "Gira la carta",
       exact: true,
     })
     .click();
   await check();
   await page
-    .getByRole("button", { name: "ACCETTA LA SFIDA", exact: true })
+    .getByRole("button", { name: "Accetta la sfida", exact: true })
     .click();
   await check();
   await page.goto("/#checkout");
   await check();
-  await fill(page);
-  await page.getByRole("button", { name: "CHECKOUT", exact: true }).click();
+  await reachOrderSummary(page);
+  await page.getByRole("button", { name: "Conferma il preordine", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "ACQUISTO ANDATO A BUON FINE" }),
+    page.getByRole("heading", { name: "Preordine confermato" }),
   ).toBeVisible();
   await check();
   await page.goto("/#statua");
-  await expect(page.locator(".ds-statue-poster")).toBeVisible();
+  const poster = page.getByRole("img", {
+    name: "Batman accovacciato sul gargoyle",
+  });
+  await expect(poster).toBeVisible();
   await expect(page.locator(".statue-stage canvas")).toHaveCount(0);
+  await expect(page.locator(".statue-stage").getByRole("listitem")).toHaveText([
+    /Bronzo a cera persa/,
+    /La posa sul gargoyle/,
+    /Patina bruna/,
+  ]);
+  await expect(page.getByRole("heading", { name: "La veglia di Gotham" })).toBeInViewport();
+  await expect(page.getByText("Statua di Batman in bronzo, scala 1:1")).toBeInViewport();
+  await expect(page.getByText("180 × 130 × 135 cm circa (A × L × P), base inclusa")).toBeInViewport();
   await expect(
-    page.locator("main").getByRole("button", { name: "PREORDINA IL CAVALIERE" }),
+    page.locator("main").getByRole("button", { name: "Preordina la statua" }),
   ).toBeEnabled();
   await check();
 });
@@ -1014,14 +1045,14 @@ test("unknown paths and the static error entry show the Figma 404", async ({
   for (const path of ["/pagina-inesistente", "/404.html"]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { name: "404" })).toBeVisible();
-    await expect(page).toHaveTitle("404 | Batman Statue Experience");
+    await expect(page).toHaveTitle("404 | La Veglia di Gotham");
     await expect(backdrop(page).locator("video")).toHaveAttribute(
       "src",
       BATCOMPUTER_VIDEO,
     );
-    await page.getByRole("link", { name: "TORNA ALLA HOME" }).click();
+    await page.getByRole("link", { name: "Torna alla home" }).click();
     await expect(
-      page.getByRole("heading", { name: "BATMAN STATUE EXPERIENCE" }),
+      page.getByRole("heading", { name: "La Veglia di Gotham" }),
     ).toBeVisible();
   }
 });
@@ -1086,12 +1117,12 @@ test("audio starts after returning to desktop from touch mode", async ({
   await page.getByRole("button", { name: "Silenzia audio" }).click();
   await setCoarsePointer(true);
   await expect(
-    page.getByRole("heading", { name: "DISPOSITIVO NON COMPATIBILE" }),
+    page.getByRole("heading", { name: "Apri il sito da computer" }),
   ).toBeVisible();
   await setCoarsePointer(false);
   await expect(page.getByRole("button", { name: "Silenzia audio" })).toBeVisible();
 
   const music = page.waitForRequest("**/assets/audio/SiglaBatman.wav");
-  await page.getByRole("button", { name: "INIZIA LA MISSIONE", exact: true }).click();
+  await page.getByRole("button", { name: "Entra nella Batcaverna", exact: true }).click();
   await music;
 });

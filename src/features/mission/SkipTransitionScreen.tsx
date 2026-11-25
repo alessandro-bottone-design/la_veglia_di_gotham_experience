@@ -15,7 +15,7 @@ export default function SkipTransitionScreen({
   onEnded,
   isPaused,
   reducedMotion,
-  label = "SALTA LA TRANSIZIONE",
+  label = "Vai alla prossima area",
 }: Props) {
   const video = useRef<HTMLVideoElement>(null);
   const done = useRef(false);
@@ -31,20 +31,24 @@ export default function SkipTransitionScreen({
   }, [isPaused]);
 
   useEffect(() => {
-    if (reducedMotion && !isPaused) finish();
-  }, [reducedMotion, isPaused, finish]);
+    if (reducedMotion || video.current?.ended) finish();
+  }, [reducedMotion, finish]);
 
   useEffect(() => {
     const el = video.current;
     if (!el || reducedMotion) return;
     if (isPaused) el.pause();
-    else void el.play().catch(() => setFailed(true));
+    else if (!el.ended)
+      void el.play().catch((error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError"))
+          setFailed(true);
+      });
   }, [isPaused, reducedMotion, src]);
 
   return (
     <section
       className="transition-player"
-      data-figma-node="359:3955"
+      data-figma-node="395:14722"
       aria-label="Transizione alla prossima area"
     >
       {!reducedMotion && !failed && (
@@ -57,9 +61,9 @@ export default function SkipTransitionScreen({
           onError={() => setFailed(true)}
         />
       )}
-      <div className="ds-skip-transition" data-figma-node="359:3936">
-        <div className="ds-skip-transition-action" data-figma-node="359:3926">
-          <Button tone="secondary" disabled={isPaused} onClick={finish}>
+      <div className="ds-panel ds-secondary ds-skip-transition" data-figma-node="406:3223">
+        <div className="ds-skip-transition-action" data-figma-node="405:3210">
+          <Button tone="secondary" onClick={finish}>
             {label}
           </Button>
         </div>

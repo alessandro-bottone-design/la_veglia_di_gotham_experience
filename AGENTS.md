@@ -1,6 +1,6 @@
 # Regole di Sviluppo del Progetto (Antigravity & AI Agents)
 
-Questo file definisce le regole operative vincolanti per il progetto **Batman Statue Experience**.
+Questo file definisce le regole operative vincolanti per il progetto **La Veglia di Gotham Experience**.
 
 ---
 

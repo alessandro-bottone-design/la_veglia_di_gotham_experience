@@ -1,5 +1,6 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { Button, IconButton, Logos, Timer } from "../ui/DesignSystem";
+import { PREORDER_LABEL } from "../../lib/statue";
 
 export type NavPhase =
   | "start"
@@ -64,7 +65,7 @@ export default function Navbar({
       ref={ref}
       className="ds-navbar"
       aria-label="Controlli esperienza"
-      data-figma-node="249:1659"
+      data-figma-node="395:14599"
     >
       <div className="ds-navbar-left">
         <Logos />
@@ -78,7 +79,7 @@ export default function Navbar({
               aria-valuemin={0}
               aria-valuemax={5}
               aria-valuenow={completedCount}
-              data-figma-node="238:2995"
+              data-figma-node="395:14486"
             >
               <span className="ds-body-small-space">INDIZI RACCOLTI</span>
               <div>
@@ -101,7 +102,7 @@ export default function Navbar({
         <div className="ds-navbar-actions">
           {onPreorder && (
             <Button size="small" onClick={onPreorder}>
-              PREORDINA IL CAVALIERE
+              {PREORDER_LABEL}
             </Button>
           )}
           {showMute && (

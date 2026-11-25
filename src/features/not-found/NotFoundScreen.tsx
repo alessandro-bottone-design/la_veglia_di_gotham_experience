@@ -9,15 +9,15 @@ export default function NotFoundScreen() {
       <main className="ds-centered">
         <section
           className="ds-panel ds-secondary ds-not-found"
-          data-figma-node="249:953"
+          data-figma-node="401:976"
           aria-labelledby="error-title"
         >
           <h1 id="error-title" className="ds-display ds-glow-text">
             404
           </h1>
-          <p className="ds-body">SPIACENTI PAGINA NON TROVATA.</p>
+          <p className="ds-body">Pagina non trovata.</p>
           <a className="ds-button ds-button-big ds-secondary" href="/">
-            TORNA ALLA HOME
+            Torna alla home
           </a>
         </section>
       </main>

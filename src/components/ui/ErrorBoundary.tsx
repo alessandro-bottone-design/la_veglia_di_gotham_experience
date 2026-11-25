@@ -10,12 +10,8 @@ export default class ErrorBoundary extends Component<
   render() {
     return this.state.failed ? (
       <section className="result-screen">
-        <p className="eyebrow">MODALITÀ ALTERNATIVA</p>
-        <h1>La Batcaverna non è disponibile.</h1>
-        <p>
-          Il browser non riesce ad avviare WebGL. Puoi riprovare o scoprire
-          direttamente la statua.
-        </p>
+        <h1>La Batcaverna non si apre</h1>
+        <p>Il browser non riesce a mostrare il panorama.</p>
         <div className="action-row">
           <button
             onClick={() =>

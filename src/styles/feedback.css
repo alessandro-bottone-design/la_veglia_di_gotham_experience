@@ -1,13 +1,15 @@
 .ds-result {
-  width: 478px;
+  width: 440px;
   max-width: 100%;
-  min-height: 739px;
+  min-height: 539px;
   padding: 20px;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 40px;
 }
 .ds-result .ds-display {
   margin-block: 20px;
+  font-size: clamp(38px, 5vw, 72px);
+  line-height: 1.1;
 }
 .ds-result .ds-body {
   width: 419px;
@@ -15,14 +17,15 @@
   padding: 20px;
 }
 .ds-result-loss {
-  width: 434px;
-  min-height: 444px;
+  min-height: 319px;
 }
 .ds-not-found {
-  width: 424px;
+  --panel-stroke: 3px;
+  width: 544px;
   max-width: 100%;
-  min-height: 279px;
+  min-height: 319px;
   padding: 20px;
+  border-radius: 20px;
 }
 .ds-not-found h1,
 .ds-not-found p {
@@ -45,7 +48,7 @@
   line-height: 1.1;
 }
 .result-screen .eyebrow {
-  color: #ffd700;
+  color: var(--yellow);
   font-size: 12px;
 }
 .action-row {
@@ -57,8 +60,8 @@
 .statue-loading button {
   min-height: 48px;
   padding: 15px 24px;
-  border: 1px solid #ffd700;
-  background: #ffd700;
+  border: 1px solid var(--yellow);
+  background: var(--yellow);
   color: #08080b;
   font:
     700 13px/1.3 "Space Grotesk",
@@ -67,5 +70,5 @@
 }
 .result-screen .secondary {
   background: #101014;
-  color: #ffd700;
+  color: var(--yellow);
 }

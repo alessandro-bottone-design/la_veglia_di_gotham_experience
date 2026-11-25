@@ -5,7 +5,9 @@ import { useDesktop } from "../../hooks/useDesktop";
 
 const BATCOMPUTER = "/assets/textures/BatCaverna_Batcomputer360";
 
-export default function BatcaveBackdrop() {
+export default function BatcaveBackdrop({
+  isPaused = false,
+}: { isPaused?: boolean }) {
   const isDesktop = useDesktop();
   const reduced = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -147,10 +149,6 @@ export default function BatcaveBackdrop() {
         video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
       )
         playVideo();
-      else
-        void video.play().catch(() => {
-          /* Keep the static image. */
-        });
     }
 
     return () => {
@@ -172,6 +170,16 @@ export default function BatcaveBackdrop() {
     };
   }, [isDesktop, reduced]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isPaused) video.pause();
+    else
+      void video.play().catch(() => {
+        /* Keep the static image. */
+      });
+  }, [isDesktop, reduced, isPaused]);
+
   return (
     <div className="batcave-backdrop" aria-hidden="true" inert>
       {isDesktop && (
@@ -181,7 +189,6 @@ export default function BatcaveBackdrop() {
         <video
           ref={videoRef}
           src={BATCOMPUTER + ".mp4"}
-          autoPlay
           muted
           loop
           playsInline

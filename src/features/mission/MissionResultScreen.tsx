@@ -13,7 +13,7 @@ export default function MissionResultScreen({
     <section
       className="ds-centered"
       aria-labelledby="result-title"
-      data-figma-node={won ? "302:1346" : "302:1347"}
+      data-figma-node={won ? "302:1252" : "302:1251"}
     >
       <div
         className={
@@ -27,29 +27,13 @@ export default function MissionResultScreen({
           {won ? "COMPIUTA" : "FALLITA"}
         </h1>
         <p className="ds-body">
-          {won ? (
-            <>
-              Complimenti, Bats…
-              <br />
-              Per una volta non era mia intenzione
-              <br />
-              farti saltare in aria.
-              <br />
-              Goditi pure la tua preziosa reliquia,
-              <br />
-              te la sei guadagnata.
-            </>
-          ) : (
-            <>
-              Gotham ha pagato il prezzo!
-              <br />
-              Ora la Bat Caverna non esiste più!
-            </>
-          )}
+          {won
+            ? "Hai fermato il conto alla rovescia, Batman. Un applauso! E adesso, signore e signori, alziamo il sipario."
+            : "Sipario, Batman! Il tempo è scaduto e della tua Batcaverna mi sa che resta solo il parcheggio."}
         </p>
         {won && <Timer seconds={seconds} tone="primary" />}
         <Button tone={won ? "primary" : "secondary"} onClick={onContinue}>
-          {won ? "SCOPRI LA STATUA" : "RIPROVA LA MISSIONE"}
+          {won ? "Scopri la statua" : "Riprova la missione"}
         </Button>
       </div>
     </section>

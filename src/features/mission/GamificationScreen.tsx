@@ -45,14 +45,14 @@ const BATCOMPUTER_RIDDLES = [
   {
     id: 1,
     riddle:
-      "Non è un uomo, non è un mostro, non è un re... eppure tutta Gotham trattiene il fiato quando compare nel cielo notturno.",
+      "Quale segnale accende Gordon per chiamare Batman? Cercalo nel cielo di Gotham.",
     options: ["JOKER", "BAT SEGNALE", "PINGUINO", "ARKHAM"],
     correctAnswer: "BAT SEGNALE",
   },
   {
     id: 2,
     riddle:
-      "Porto un sorriso eterno, ma non ho mai conosciuto la gioia. Più rido... più Gotham brucia.",
+      "Chi porta il sorriso di un pagliaccio anche quando Gotham va a fuoco? Su, Batman, questa te la regalo.",
     options: ["ROBIN", "JOKER", "DUE FACCE", "ENIGMISTA"],
     correctAnswer: "JOKER",
   },
@@ -60,7 +60,7 @@ const BATCOMPUTER_RIDDLES = [
 const ARMERIA_RIDDLE = {
   id: 3,
   riddle:
-    "Non ho poteri sovrumani, eppure i criminali tremano al mio nome. Le tenebre sono il mio dominio.",
+    "Chi pattuglia Gotham con mantello e maschera e si affida soltanto al suo addestramento e ai suoi congegni?",
   options: ["SUPERMAN", "BATMAN", "BANE", "FLASH"],
   correctAnswer: "BATMAN",
 };
@@ -68,14 +68,14 @@ const BATMOBILE_RIDDLES = [
   {
     id: 4,
     riddle:
-      "Divoro l’asfalto di Gotham a velocità impossibili. Lascio solo fumo e terrore. Cosa sono?",
+      "Come si chiama l’auto con cui Batman sfreccia per le strade di Gotham?",
     options: ["BATWING", "BATMOBILE", "JOKER VAN", "TRENO DI GOTHAM"],
     correctAnswer: "BATMOBILE",
   },
   {
     id: 5,
     riddle:
-      "Ruggio nell’oscurità di Gotham, il cuore pulsante della Bat Mobile, cosa sono?",
+      "Quale componente della Batmobile produce la spinta quando dal retro esce un getto di gas?",
     options: ["PISTONE", "REATTORE", "TURBINA"],
     correctAnswer: "REATTORE",
   },
@@ -249,22 +249,20 @@ export default function GamificationScreen({
   }
 
   if (graphics === "checking")
-    return <LoadingScreen srLabel="Verifica grafica…" />;
+    return <LoadingScreen srLabel="Controllo il supporto grafico…" />;
   if (graphics === "unavailable" || failed || contextLost) {
     const unsupported = graphics === "unavailable";
     return (
       <section className="result-screen">
-        {unsupported && <p className="eyebrow">MODALITÀ ALTERNATIVA</p>}
         <h1>
           {unsupported
-            ? "La Batcaverna non è disponibile."
-            : "Ambiente non disponibile"}
+            ? "La Batcaverna non si apre"
+            : "Quest’area non si apre"}
         </h1>
         <p>
           {unsupported
-            ? "Il browser non riesce ad avviare WebGL."
-            : "Non è stato possibile caricare questa area."}{" "}
-          Puoi riprovare oppure scoprire la statua.
+            ? "Il browser non riesce ad avviare la visuale 3D."
+            : "Il browser non riesce a caricare il panorama."}
         </p>
         <div className="action-row">
           <button onClick={recover}>Riprova</button>
@@ -391,7 +389,7 @@ export default function GamificationScreen({
         )}
       </div>
       <JokerHintSystem {...hint} isMuted={isMuted} isPaused={isPaused} />
-      {loading && <LoadingScreen srLabel="Sincronizzazione area…" />}
+      {loading && <LoadingScreen srLabel="Caricamento del panorama…" />}
     </section>
   );
 }

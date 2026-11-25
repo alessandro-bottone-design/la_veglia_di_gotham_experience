@@ -3,24 +3,24 @@ import { Button, IconButton } from "../../components/ui/DesignSystem";
 
 const STEPS = [
   [
-    "307:4305",
-    "BATTI IL TEMPO",
-    "Hai a disposizione 3 Minuti.\nSe il timer scade la missione fallisce",
+    "389:8586",
+    "Tre minuti",
+    "Risolvi tutti gli enigmi prima che scada il tempo.",
   ],
   [
-    "307:4304",
-    "RISOLVI GLI ENIGMI",
-    "Rispondi correttamente alle domande\nposte dal Joker per procedere",
+    "389:8585",
+    "Risolvi gli enigmi",
+    "Apri una carta e scegli la risposta giusta per raccogliere l’indizio.",
   ],
   [
-    "307:4303",
-    "TROVA TUTTI GLI INDIZI",
-    "Individua tutte le Joker Cards\nnascoste nell’oscurità",
+    "389:8585",
+    "Trova le cinque carte",
+    "Cerca le carte del Joker nelle tre aree della Batcaverna.",
   ],
   [
-    "307:4302",
-    "ESPLORA L’AMBIENTE",
-    "Muovi il cursore\nai bordi dello schermo\nper esplorare la BatCaverna a 360 gradi.",
+    "389:8584",
+    "Guardati intorno",
+    "Porta il puntatore ai bordi dello schermo per ruotare la visuale.",
   ],
 ] as const;
 
@@ -44,49 +44,41 @@ export default function TutorialScreen({
   return (
     <section
       className="ds-tutorial ds-centered"
-      data-figma-node="243:3639"
+      data-figma-node="395:14910"
       aria-labelledby="tutorial-title"
     >
-      <div
-        className="ds-panel ds-secondary ds-tutorial-intro"
-        data-figma-node="243:3612"
-      >
-        <h1 id="tutorial-title" className="ds-display">
-          ALLARME ALLA
-          <br />
-          BATCAVERNA
-        </h1>
-        <p className="ds-body">
-          Joker ha attivato una bomba nella BatCaverna.
-          <br />
-          Individua tutti e 5 gli indizi e neutralizza la minaccia
-          <br />
-          prima dello scadere del tempo.
-        </p>
-      </div>
       <div
         className="ds-panel ds-secondary ds-tutorial-card"
         data-figma-node={node}
       >
+        <header className="ds-tutorial-intro" data-figma-node="389:8524">
+          <h1 id="tutorial-title" className="ds-heading-l ds-glow-text">
+            ALLARME ALLA BATCAVERNA
+          </h1>
+          <p className="ds-body">
+            Il Joker ha attivato una bomba nella Batcaverna.
+          </p>
+        </header>
         <div className="ds-tutorial-copy" aria-live="polite" aria-atomic="true">
-          <h2 className="ds-body-space ds-glow-text">{title}</h2>
+          <h2 className="ds-body-space ds-bold ds-glow-text">{title}</h2>
           <p className="ds-body">{description}</p>
         </div>
         <div className="ds-tutorial-actions">
-          <IconButton
-            tone="secondary"
-            icon="chevron-left"
-            aria-label="Istruzione precedente"
-            disabled={step === 0}
-            onClick={(event) => {
-              transferFocus.current =
-                step === 1 && document.activeElement === event.currentTarget;
-              setStep(step - 1);
-            }}
-          />
+          {step > 0 && (
+            <IconButton
+              tone="secondary"
+              icon="chevron-left"
+              aria-label="Istruzione precedente"
+              onClick={(event) => {
+                transferFocus.current =
+                  step === 1 && document.activeElement === event.currentTarget;
+                setStep(step - 1);
+              }}
+            />
+          )}
           {last ? (
             <Button ref={start} tone="secondary" onClick={onComplete}>
-              INIZIA LA MISSIONE
+              Inizia la missione
             </Button>
           ) : (
             <IconButton

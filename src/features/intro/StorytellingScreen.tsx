@@ -2,18 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/ui/DesignSystem";
 import { BatcavernAudio } from "../../lib/audioManager";
 
+const CARD_PROMPT = "Gira la carta";
 const STORY_MESSAGE =
-  "Batman... Ho lasciato un regalino\n" +
-  "nella tua preziosa BatCaverna...\n" +
-  "Risolvi il gioco o la tua BatCaverna\n" +
-  "diventerà polvere\n" +
-  "Non è il solito giocattolo,\n" +
-  "ma qualcosa che farà il botto...\n" +
-  "Il tempo scorre.\n" +
-  "TIC, TAC, TIC, TAC...\n" +
-  "Trova i miei 5 indizi,\n" +
-  "dimostrami che il grande pipistrello\n" +
-  "sa ancora giocare.";
+  "Benvenuto al tuo spettacolo, Batman. Ho nascosto cinque carte nella tua Batcaverna. " +
+  "Trovale e risolvi gli enigmi. Hai tre minuti, poi salto agli effetti speciali.";
 
 export default function StorytellingScreen({
   onBegin,
@@ -57,20 +49,20 @@ export default function StorytellingScreen({
   return (
     <section
       className="ds-storytelling ds-centered"
-      data-figma-node="353:3343"
+      data-figma-node="395:15070"
       aria-label="Introduzione alla missione"
     >
       <div
         className="ds-story-card"
         data-face={flipped ? "back" : "front"}
-        data-figma-node={flipped ? "353:3246" : "353:3247"}
+        data-figma-node={flipped ? "389:10412" : "389:10413"}
       >
         <div className="ds-story-card-inner">
           <button
             type="button"
             className="ds-story-card-front"
-            aria-label="Interagisci con il reperto per decifrare il messaggio"
-            disabled={isPaused || flipped}
+            aria-label={CARD_PROMPT}
+            disabled={flipped}
             aria-hidden={flipped}
             inert={flipped || undefined}
             onClick={handleFlip}
@@ -85,40 +77,23 @@ export default function StorytellingScreen({
             inert={!flipped || undefined}
           >
             <div className="ds-story-card-back-art" aria-hidden="true">
-              <span className="ds-card-art-top">
-                <img src="/assets/ds/card-back.png" alt="" draggable={false} />
-              </span>
-              <span className="ds-card-art-middle">
-                <img src="/assets/ds/card-back.png" alt="" draggable={false} />
-              </span>
-              <span className="ds-card-art-bottom">
-                <img src="/assets/ds/card-back.png" alt="" draggable={false} />
-              </span>
+              <img src="/assets/ds/card-back.png" alt="" draggable={false} />
             </div>
             <div className="ds-story-card-content" data-figma-node="353:3223">
               {flipped && <h1 className="sr-only">Messaggio del Joker</h1>}
               <div className="ds-story-card-body" data-figma-node="353:3206">
                 <p>{STORY_MESSAGE}</p>
               </div>
-              <Button
-                ref={acceptRef}
-                tone="secondary"
-                disabled={isPaused}
-                onClick={handleAccept}
-              >
-                ACCETTA LA SFIDA
+              <Button ref={acceptRef} tone="secondary" onClick={handleAccept}>
+                Accetta la sfida
               </Button>
             </div>
           </div>
         </div>
       </div>
       {!flipped && (
-        <div className="ds-story-subtitle" data-figma-node="353:3336">
-          <h1 className="ds-heading ds-white">
-            INTERAGISCI CON IL REPERTO
-            <br />
-            PER DECIFRARE IL MESSAGGIO
-          </h1>
+        <div className="ds-story-subtitle" data-figma-node="353:3335">
+          <h1 className="ds-heading ds-white">{CARD_PROMPT}</h1>
         </div>
       )}
     </section>

@@ -16,8 +16,8 @@ export default function JokerHintSystem({
   }, [hintActive, isMuted, isPaused]);
   return hintActive && !isPaused ? (
     <p className="sr-only" role="status">
-      Un indizio ti aspetta. Cerca la carta evidenziata oppure raggiungila con
-      Tab. <span className="sr-only">Livello aiuto {hintPhase}</span>
+      Cerca la carta evidenziata o usa Tab per raggiungerla.{" "}
+      <span className="sr-only">Aiuto {hintPhase}</span>
     </p>
   ) : null;
 }

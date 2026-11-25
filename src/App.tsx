@@ -21,7 +21,7 @@ import {
   MobileNotice,
 } from "./components/ui/DesignSystem";
 import { useDesktop } from "./hooks/useDesktop";
-import { useMissionTimer } from "./hooks/useMissionTimer";
+import { useMissionTimer } from "./features/mission/useMissionTimer";
 import {
   experienceReducer,
   initialExperience,
@@ -95,7 +95,8 @@ function Experience() {
     previousView.current = viewPhase;
     setPaused(false);
     window.scrollTo(0, 0);
-    heading.current?.focus();
+    const main = heading.current;
+    if (main && !main.contains(document.activeElement)) main.focus();
   }, [viewPhase]);
   useEffect(() => {
     if (
@@ -180,7 +181,7 @@ function Experience() {
     };
   }, [paused, phase]);
   const showBackdrop =
-    paused || failed || (!playing && !transition && phase !== "showreel");
+    failed || (!playing && !transition && phase !== "showreel");
   const goStatue = () => navigate("showreel");
   const goCheckout = () => navigate("checkout");
   let navPhase: NavPhase;
@@ -200,10 +201,11 @@ function Experience() {
       data-phase={viewPhase}
       data-paused={paused || undefined}
     >
-      {showBackdrop && <BatcaveBackdrop />}
+      {showBackdrop && <BatcaveBackdrop isPaused={paused} />}
       <a
         className="skip-link"
         href="#experience-content"
+        inert={paused || undefined}
         onClick={(e) => {
           e.preventDefault();
           heading.current?.focus();
@@ -237,7 +239,7 @@ function Experience() {
         >
           <Suspense
             fallback={
-              <LoadingScreen srLabel="Inizializzazione della Batcaverna" />
+              <LoadingScreen />
             }
           >
             {phase === "start" && (
@@ -312,7 +314,10 @@ function Experience() {
               />
             )}
             {phase === "thankyou" && state.order && (
-              <ThankYouScreen onReturnHome={() => navigate("start")} />
+              <ThankYouScreen
+                order={state.order}
+                onReturnHome={() => navigate("start")}
+              />
             )}
             {status === "active" && (
               <JokerAudio

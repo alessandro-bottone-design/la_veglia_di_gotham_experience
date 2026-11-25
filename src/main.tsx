@@ -27,7 +27,7 @@ root.addEventListener(
 const notFound =
   root.hasAttribute("data-not-found") ||
   !["/", "/index.html"].includes(location.pathname);
-if (notFound) document.title = "404 | Batman Statue Experience";
+if (notFound) document.title = "404 | La Veglia di Gotham";
 createRoot(root).render(
   <StrictMode>
     {notFound ? <NotFoundScreen /> : <App />}
