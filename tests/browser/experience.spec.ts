@@ -445,7 +445,8 @@ test("both transitions freeze the countdown and it can expire during the fifth f
   }
 
   await reach(page, 5);
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+  // Leave time for the command to reach the browser on a loaded CI runner.
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 5_000));
   const remaining = await readMissionTime(page);
   expect(remaining).toBeGreaterThan(2);
   await page.clock.fastForward((remaining - 2) * 1000);
