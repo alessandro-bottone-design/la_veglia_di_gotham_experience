@@ -6,6 +6,12 @@ export default function StartScreen({ onStart }: { onStart: () => void }) {
       data-figma-node="403:2924"
       aria-labelledby="start-title"
     >
+      <img
+        className="ds-start-cover"
+        src="/assets/textures/img_copertina_presentazione.jpg"
+        alt=""
+        fetchPriority="high"
+      />
       <div className="ds-start-stack" data-figma-node="402:2773">
         <div className="ds-start-title">
           <h1 id="start-title" className="ds-display ds-glow-text">

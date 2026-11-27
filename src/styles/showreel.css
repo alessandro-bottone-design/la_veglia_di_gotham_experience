@@ -58,17 +58,33 @@
   pointer-events: auto;
 }
 .ds-showreel-right {
+  --card-tilt: -8deg;
   align-items: flex-end;
 }
 .ds-showreel-left {
+  --card-tilt: 8deg;
   align-items: flex-start;
+}
+.ds-showreel-card-hover {
+  width: min(40%, 563px);
 }
 .ds-showreel-card {
   display: grid;
   gap: 20px;
-  width: min(40%, 563px);
   padding: clamp(16px, 2.8vw, 40px);
   text-align: start;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .ds-showreel-card-hover {
+    pointer-events: auto;
+  }
+  .ds-showreel-card {
+    transition: transform 260ms ease-out;
+  }
+  .ds-showreel-card-hover:hover .ds-showreel-card {
+    transform: perspective(900px) translateY(-6px) rotateX(5deg)
+      rotateY(var(--card-tilt));
+  }
 }
 .ds-showreel-card .ds-heading-l {
   font-size: clamp(22px, 2.78vw, 40px);
@@ -124,7 +140,7 @@
     justify-content: flex-end;
     padding-bottom: clamp(20px, 5svh, 48px);
   }
-  .ds-showreel-card {
+  .ds-showreel-card-hover {
     width: min(100%, 380px);
   }
 }

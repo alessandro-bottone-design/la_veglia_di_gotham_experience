@@ -141,7 +141,7 @@ export default function CheckoutScreen({
       aria-labelledby="checkout-title"
     >
       <h1 id="checkout-title" className="ds-display">
-        Preordine
+        Ordine
       </h1>
       <p id="checkout-navigation" className="ds-checkout-notice">
         Usa le frecce per cambiare tappa o premi Spazio per avanzare.
@@ -226,7 +226,7 @@ export default function CheckoutScreen({
           )}
           {isOrder ? (
             <Button ref={nextButton} disabled={loading} type="submit">
-              Conferma il preordine
+              Conferma l’ordine
             </Button>
           ) : (
             <IconButton
@@ -239,7 +239,7 @@ export default function CheckoutScreen({
         </div>
         {loading && (
           <p role="status" className="sr-only">
-            Conferma del preordine in corso.
+            Conferma dell’ordine in corso.
           </p>
         )}
       </form>

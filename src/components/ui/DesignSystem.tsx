@@ -186,10 +186,12 @@ export function Timer({
   seconds,
   small = false,
   tone = "secondary",
+  label = "Tempo alla detonazione",
 }: {
   seconds: number;
   small?: boolean;
   tone?: Tone;
+  label?: string;
 }) {
   const value =
     String(Math.floor(seconds / 60)).padStart(2, "0") +
@@ -198,7 +200,7 @@ export function Timer({
   return (
     <div
       className={"ds-timer ds-" + tone + (small ? " ds-timer-small" : "")}
-      aria-label="Tempo alla detonazione"
+      aria-label={label}
       data-figma-node={
         small
           ? tone === "secondary"
@@ -210,7 +212,7 @@ export function Timer({
       }
     >
       <span className={small ? "ds-caption" : "ds-body-space"}>
-        TEMPO ALLA DETONAZIONE
+        {label.toUpperCase()}
       </span>
       <span className={small ? "ds-heading-l" : "ds-display"} role="timer">
         {value}

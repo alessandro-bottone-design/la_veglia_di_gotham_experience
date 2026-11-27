@@ -12,17 +12,17 @@
 | Montaggio | [Figma · montaggio_schermate](https://www.figma.com/design/HNqMZbAGUnygNJu9kVJzOc/la_veglia_di_gotham_experience_design_system?node-id=401-975) |
 | Testi del prototipo | [Copy ufficiale](../LA_VEGLIA_DI_GOTHAM_COPY_SITO.md) · [Mappa del copy](TESTI_SITO.md) |
 | Materiali di lavoro | [Spazio di progetto ChatGPT](https://chatgpt.com/g/g-p-6a15bf741ef08191ab845e2047c91493-sitowebbatmanstatueexperience/project) |
-| Prototipo web | [Sito pubblico](https://batman-statue-experience.vercel.app/) · [Repository GitHub](https://github.com/alessandro-bottone-design/la_veglia_di_gotham_experience) |
+| Prototipo web | [Sito pubblico](https://lavegliadigothamexperience.vercel.app/) · [Repository GitHub](https://github.com/alessandro-bottone-design/la_veglia_di_gotham_experience) |
 
 ## Concept e pubblico
 
-Il progetto risponde alla consegna di un prototipo interattivo di acquisto immersivo su desktop. La Batcaverna introduce una sfida narrativa in prima persona, il superamento degli enigmi porta alla presentazione della statua e il checkout mette in scena il preordine.
+Il progetto risponde alla consegna di un prototipo interattivo di acquisto immersivo su desktop. La Batcaverna introduce una sfida narrativa in prima persona, il superamento degli enigmi porta alla presentazione della statua e il checkout mette in scena l’ordine.
 
 **Marco, 34 anni**, rappresenta il collezionista appassionato di DC. Il progetto assume che voglia osservare con calma forma e finitura di un oggetto da collezione e vedere con chiarezza prezzo e spedizione. La missione propone una motivazione narrativa, lo showreel dedica spazio al prodotto e il riepilogo rende esplicito il totale dimostrativo di **12.900 €** con trasporto incluso.
 
 | Criterio | Risposta progettuale |
 | --- | --- |
-| Idea progettuale | Percorso desktop con un ambiente investigativo a 360°, uno showreel e un preordine simulato. |
+| Idea progettuale | Percorso desktop con un ambiente investigativo a 360°, uno showreel e un ordine simulato. |
 | Buyer persona | Tono ispirato a Gotham, osservazione dei dettagli scultorei e riepilogo dei costi. |
 | Bias cognitivi | Timer per l’urgenza, accesso narrativo alla statua dopo la missione, indicatori di avanzamento, presentazione dei dettagli prima del prezzo. |
 | Tecniche di attenzione | Rivelazione della carta, giallo e viola con funzioni distinte, aiuti visivi e sonori, alternanza delle card e pause durante lo showreel. |
@@ -54,7 +54,7 @@ La pagina `design_system` contiene le sezioni per fondamenti e componenti. Il mo
 | Avvio e introduzione | `start-screen`, `storytelling-screen`, `tutorial-screen` | `StartScreen`, `StorytellingScreen`, `TutorialScreen` |
 | Navigazione e avanzamento | `navbar`, `timer`, `button-text`, `icon-button` | `Navbar` e componenti condivisi |
 | Missione e stati temporanei | `card-clues`, `skip-transition-card`, `pause-screen`, `victory-defeat-screen` | `GamificationScreen`, `SkipTransitionScreen`, `PauseOverlay`, `MissionResultScreen` |
-| Statua, preordine e conferma | `showreel-screen`, `checkout-screen`, `thank-you-screen` | `ShowreelScreen`, `CheckoutScreen`, `ThankYouScreen` |
+| Statua, ordine e conferma | `showreel-screen`, `checkout-screen`, `thank-you-screen` | `ShowreelScreen`, `CheckoutScreen`, `ThankYouScreen` |
 | Caricamento, touch ed errore | `loading-scren`, `mobile-card-advisor`, `404-error-screen` | `LoadingScreen`, `MobileNotice`, `NotFoundScreen` |
 
 Il checkout è una simulazione locale. Le verifiche Playwright coprono il percorso, i componenti e scenari di accessibilità selezionati con axe. La [guida tecnica](SVILUPPO.md) descrive come eseguire le verifiche e quali parti del sistema riguardano.

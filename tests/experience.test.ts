@@ -56,9 +56,10 @@ test("five clues across three scenes are required to win", () => {
   s = reduce(reduce(s, { type: "next" }), { type: "next" });
   assert.equal(s.phase, "batmobile");
   s = reduce(s, { type: "progress", count: 5 });
-  const win = reduce(s, { type: "win", time: 89 });
+  const win = reduce(s, { type: "win", time: 42 });
   assert.equal(win.status, "succeeded");
   assert.equal(win.phase, "reveal");
+  assert.equal(win.time, 42);
   assert.equal("speedrun" in win, false);
 });
 test("failure cannot progress and reset starts a clean run", () => {
