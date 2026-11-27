@@ -8,7 +8,7 @@ import {
 } from "motion/react";
 import { Button, LoadingScreen } from "../../components/ui/DesignSystem";
 import {
-  PREORDER_LABEL,
+  ORDER_LABEL,
   STATUE_DESCRIPTION,
   STATUE_DIMENSIONS,
   STATUE_NAME,
@@ -81,9 +81,9 @@ function ScrollOverlay({
 }
 
 export default function ShowreelScreen({
-  onPreorder,
+  onOrder,
 }: {
-  onPreorder?: () => void;
+  onOrder?: () => void;
 }) {
   const reduced = !!useReducedMotion();
   const container = useRef<HTMLDivElement>(null);
@@ -167,12 +167,14 @@ export default function ShowreelScreen({
               className={`ds-showreel-step ds-showreel-${align}`}
               node={node}
             >
-              <div
-                className="ds-panel ds-primary ds-showreel-card"
-                data-figma-node="241:3517"
-              >
-                <h2 className="ds-heading-l">{title}</h2>
-                <p className="ds-body">{description}</p>
+              <div className="ds-showreel-card-hover">
+                <div
+                  className="ds-panel ds-primary ds-showreel-card"
+                  data-figma-node="241:3517"
+                >
+                  <h2 className="ds-heading-l">{title}</h2>
+                  <p className="ds-body">{description}</p>
+                </div>
               </div>
             </ScrollOverlay>
           ))}
@@ -189,10 +191,10 @@ export default function ShowreelScreen({
             <p>{STATUE_DIMENSIONS}</p>
           </div>
           <Button
-            onClick={onPreorder}
+            onClick={onOrder}
             disabled={!reduced && (!loaded || !finalReady)}
           >
-            {PREORDER_LABEL}
+            {ORDER_LABEL}
           </Button>
           {reduced && (
             <ul className="sr-only">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { Button, IconButton, Logos, Timer } from "../ui/DesignSystem";
-import { PREORDER_LABEL } from "../../lib/statue";
+import { MISSION_SECONDS } from "../../features/mission/useMissionTimer";
+import { ORDER_LABEL } from "../../lib/statue";
 
 export type NavPhase =
   | "start"
@@ -21,7 +22,7 @@ type Props = {
   onToggleMute?: () => void;
   isPaused?: boolean;
   onTogglePause?: () => void;
-  onPreorder?: () => void;
+  onOrder?: () => void;
   completedCount?: number;
   timeLeft?: number;
   progressTrack?: RefObject<HTMLSpanElement | null>;
@@ -33,9 +34,9 @@ export default function Navbar({
   onToggleMute,
   isPaused = false,
   onTogglePause,
-  onPreorder,
+  onOrder,
   completedCount = 0,
-  timeLeft = 180,
+  timeLeft = MISSION_SECONDS,
   progressTrack,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
@@ -55,10 +56,7 @@ export default function Navbar({
   }, []);
   const showHud = phase === "gamification" || phase === "tutorial";
   const showMute = Boolean(onToggleMute) && phase !== "not-found";
-  const showPause =
-    Boolean(onTogglePause) &&
-    (isPaused ||
-      (phase !== "loading" && phase !== "showreel" && phase !== "not-found"));
+  const showPause = phase === "gamification" && Boolean(onTogglePause);
 
   return (
     <nav
@@ -98,11 +96,11 @@ export default function Navbar({
           </div>
         )}
       </div>
-      {(onPreorder || showMute || showPause) && (
+      {(onOrder || showMute || showPause) && (
         <div className="ds-navbar-actions">
-          {onPreorder && (
-            <Button size="small" onClick={onPreorder}>
-              {PREORDER_LABEL}
+          {onOrder && (
+            <Button size="small" onClick={onOrder}>
+              {ORDER_LABEL}
             </Button>
           )}
           {showMute && (

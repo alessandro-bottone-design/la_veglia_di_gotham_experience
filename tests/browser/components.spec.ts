@@ -84,9 +84,15 @@ test("official button, icon and timer variants preserve geometry and state color
   ]);
   await page.mouse.move(600, 600);
   await expect(page.locator(".ds-cursor")).toBeVisible();
-  expect(
-    (await page.locator(".ds-cursor img").boundingBox())!.width,
-  ).toBeCloseTo(173.433, 1);
+  const cursor = page.locator(".ds-cursor img");
+  await expect(cursor).toBeVisible();
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 960 }]) {
+    await page.setViewportSize(viewport);
+    await page.mouse.move(600, 600);
+    const bounds = (await cursor.boundingBox())!;
+    expect(bounds.width).toBeCloseTo(173.433, 1);
+    expect(bounds.width / bounds.height).toBeCloseTo(173.433 / 146.288, 3);
+  }
 });
 test("input and in-place card expose the official focus, value, error and success states", async ({
   page,

@@ -10,7 +10,7 @@ export default function ThankYouScreen({
   onReturnHome: () => void;
 }) {
   const items = [
-    ["Numero preordine", "ord-bw-4019"],
+    ["Numero ordine", "ord-bw-4019"],
     ["Prodotto", STATUE_NAME],
     ["Quantità", order.quantity],
     ["Totale", formatEuro(order.total)],
@@ -26,7 +26,7 @@ export default function ThankYouScreen({
       <div className="ds-panel ds-thankyou-card" data-figma-node="243:3817">
         <header>
           <h1 id="thankyou-title" className="ds-display ds-glow-text">
-            Preordine
+            Ordine
             <br />
             confermato
           </h1>

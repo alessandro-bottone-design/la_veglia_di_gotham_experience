@@ -48,7 +48,7 @@ export function useJokerHint(
       resetHint();
   }, [isMissionActive, completedIds, target, resetHint]);
   const phase =
-    elapsed >= 100000 ? 3 : elapsed >= 80000 ? 2 : elapsed >= 60000 ? 1 : 0;
+    elapsed >= 40_000 ? 3 : elapsed >= 30_000 ? 2 : elapsed >= 20_000 ? 1 : 0;
   return {
     hintActive: phase > 0,
     hintCardId: phase > 0 ? target : null,

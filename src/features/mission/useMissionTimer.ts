@@ -1,149 +1,72 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
-const TOTAL_TIME = 180; // 3 minuti fissi
+export const MISSION_SECONDS = 60;
+const LIMIT_MS = MISSION_SECONDS * 1000;
 
 export function useMissionTimer(
-  missionStatus: "idle" | "active" | "failed" | "succeeded",
-  isPaused: boolean,
-  isVideoTransition: boolean,
+  run: number,
+  running: boolean,
   onTimeUp: () => void,
 ) {
-  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [bonusTimeGranted, setBonusTimeGranted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(MISSION_SECONDS);
+  const elapsed = useRef(0);
+  const started = useRef<number | null>(null);
+  const result = useRef<number | null>(null);
+  const expired = useRef(false);
 
-  // Refs per non avere dipendenze instabili nell'effect principale
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const endTimeRef = useRef<number | null>(null); // quando il timer arriva a 0 (performance.now)
-  const startTimeRef = useRef<number | null>(null); // quando la missione è partita
-  const totalPausedRef = useRef<number>(0); // ms totali in pausa
-  const pauseStartRef = useRef<number | null>(null); // inizio pausa corrente
-  const onTimeUpRef = useRef(onTimeUp);
-
-  // Aggiorna sempre la ref senza aggiungere onTimeUp alle deps dell'effect
-  useEffect(() => {
-    onTimeUpRef.current = onTimeUp;
-  }, [onTimeUp]);
-
-  const clearTimerInterval = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
+  const elapsedNow = useCallback(() => {
+    const current = started.current;
+    return elapsed.current + (current === null ? 0 : performance.now() - current);
   }, []);
 
-  const startInterval = useCallback(() => {
-    clearTimerInterval();
-    timerRef.current = setInterval(() => {
-      if (endTimeRef.current === null || startTimeRef.current === null) return;
-
-      const now = performance.now();
-      const remaining = Math.max(
-        0,
-        Math.ceil((endTimeRef.current - now) / 1000),
-      );
-      const paused =
-        totalPausedRef.current +
-        (pauseStartRef.current !== null ? now - pauseStartRef.current : 0);
-      const elapsed = Math.floor((now - startTimeRef.current - paused) / 1000);
-
-      setTimeLeft(remaining);
-      setElapsedSeconds(Math.max(0, elapsed));
-
-      if (remaining <= 0) {
-        clearTimerInterval();
-        onTimeUpRef.current();
-      }
-    }, 250);
-  }, [clearTimerInterval]);
-
-  // ── Effect principale: NON dipende da timeLeft per evitare ricreazione ogni tick ──
-  useEffect(() => {
-    // Missione non attiva → stoppa tutto
-    if (missionStatus !== "active") {
-      clearTimerInterval();
-      // Registra inizio pausa se non già fatto (missione terminata)
-      if (endTimeRef.current !== null && pauseStartRef.current === null) {
-        pauseStartRef.current = performance.now();
-      }
-      return;
+  const readClock = useCallback(() => {
+    const ms = elapsedNow();
+    setTimeLeft(Math.max(0, Math.ceil((LIMIT_MS - ms) / 1000)));
+    if (ms >= LIMIT_MS && !expired.current) {
+      expired.current = true;
+      onTimeUp();
     }
+    return ms;
+  }, [elapsedNow, onTimeUp]);
 
-    const shouldFreeze = isPaused || isVideoTransition;
+  useLayoutEffect(() => {
+    elapsed.current = 0;
+    started.current = null;
+    result.current = null;
+    expired.current = false;
+    setTimeLeft(MISSION_SECONDS);
+  }, [run]);
 
-    if (shouldFreeze) {
-      // ── PAUSA / TRANSIZIONE: ferma l'intervallo e registra l'inizio pausa ──
-      clearTimerInterval();
-      if (pauseStartRef.current === null) {
-        pauseStartRef.current = performance.now();
-      }
-    } else {
-      // ── TIMER ATTIVO ──
-      const now = performance.now();
-
-      if (endTimeRef.current === null) {
-        // Prima partenza: inizializza tutto
-        startTimeRef.current = now;
-        totalPausedRef.current = 0;
-        endTimeRef.current = now + TOTAL_TIME * 1000;
-        pauseStartRef.current = null;
-      } else if (pauseStartRef.current !== null) {
-        // Ripresa da pausa: compensa il tempo perso
-        const pauseDuration = now - pauseStartRef.current;
-        totalPausedRef.current += pauseDuration;
-        endTimeRef.current += pauseDuration;
-        pauseStartRef.current = null;
-      }
-
-      startInterval();
-    }
-
-    return () => {
-      clearTimerInterval();
+  useLayoutEffect(() => {
+    if (!running || result.current !== null || expired.current) return;
+    started.current = performance.now();
+    // Keep the displayed second aligned with the game clock after a pause.
+    let timeout: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      if (result.current !== null || expired.current) return;
+      const ms = readClock();
+      if (!expired.current) timeout = setTimeout(tick, 1000 - ms % 1000);
     };
-    // NON includere timeLeft — l'intervallo gestisce i propri tick tramite refs
-  }, [
-    missionStatus,
-    isPaused,
-    isVideoTransition,
-    clearTimerInterval,
-    startInterval,
-  ]);
-
-  const resetTimer = useCallback(() => {
-    clearTimerInterval();
-    setTimeLeft(TOTAL_TIME);
-    setElapsedSeconds(0);
-    setBonusTimeGranted(false);
-    endTimeRef.current = null;
-    startTimeRef.current = null;
-    totalPausedRef.current = 0;
-    pauseStartRef.current = null;
-  }, [clearTimerInterval]);
-
-  const grantBonusTime = useCallback(
-    (amount: number) => {
-      if (!bonusTimeGranted) {
-        setTimeLeft((prev) => prev + amount);
-        if (endTimeRef.current) {
-          endTimeRef.current += amount * 1000;
-        }
-        setBonusTimeGranted(true);
-        return true;
+    timeout = setTimeout(tick, 1000 - elapsed.current % 1000);
+    return () => {
+      clearTimeout(timeout);
+      if (started.current !== null) {
+        elapsed.current = elapsedNow();
+        started.current = null;
       }
-      return false;
-    },
-    [bonusTimeGranted],
-  );
+    };
+  }, [elapsedNow, readClock, run, running]);
 
-  return {
-    timeLeft,
-    elapsedSeconds,
-    initialTime: TOTAL_TIME,
-    timerABGroup: "A" as "A" | "B",
-    bonusTimeGranted,
-    resetTimer,
-    grantBonusTime,
-    setTimeLeft,
-  };
+  const finish = useCallback(() => {
+    if (result.current !== null || expired.current) return;
+    const ms = readClock();
+    if (ms >= LIMIT_MS) return;
+    elapsed.current = ms;
+    started.current = null;
+    result.current = Math.floor(ms / 1000);
+  }, [readClock]);
+
+  const getResult = useCallback(() => result.current, []);
+  const hasTime = useCallback(() => readClock() < LIMIT_MS, [readClock]);
+  return { timeLeft, finish, getResult, hasTime };
 }

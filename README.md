@@ -1,8 +1,8 @@
 # La Veglia di Gotham Experience
 
-Prototipo accademico desktop di un percorso di preordine immersivo. La missione nella Batcaverna conduce alla presentazione della statua e a un checkout dimostrativo con dati di esempio già compilati.
+Prototipo accademico desktop di un percorso di acquisto immersivo. La missione nella Batcaverna conduce alla presentazione della statua e a un checkout dimostrativo con dati di esempio già compilati.
 
-[Apri il sito pubblico](https://batman-statue-experience.vercel.app/) · [Apri il repository GitHub](https://github.com/alessandro-bottone-design/la_veglia_di_gotham_experience)
+[Apri il sito pubblico](https://lavegliadigothamexperience.vercel.app/) · [Apri il repository GitHub](https://github.com/alessandro-bottone-design/la_veglia_di_gotham_experience)
 
 ## Avvio locale
 

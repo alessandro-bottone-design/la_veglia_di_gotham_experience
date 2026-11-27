@@ -8,18 +8,19 @@ Questo file definisce le regole operative vincolanti per il progetto **La Veglia
 
 ### Ambito di applicazione: le schermate con UI su ambiente Batcomputer
 Nelle schermate in cui l'interfaccia utente (UI) è posizionata al di sopra dell'ambiente Batcomputer (`public/assets/textures/BatCaverna_Batcomputer360.mp4` / `.jpg`):
-1. **Start Screen** (`StartScreen`)
-2. **Storytelling** (Monologo Joker in `StorytellingScreen`)
-3. **Briefing** (Accetta la sfida in `StorytellingScreen`)
-4. **Tutorial Tappa 1** — "Batti il tempo" (`TutorialScreen`)
-5. **Tutorial Tappa 2** — "Risolvi gli enigmi" (`TutorialScreen`)
-6. **Tutorial Tappa 3** — "Trova tutti gli indizi" (`TutorialScreen`)
-7. **Tutorial Tappa 4** — "Esplora l'ambiente" (`TutorialScreen`)
-8. **Schermata di Pausa** (`PauseOverlay`)
-9. **Esito Missione** — Vittoria o Sconfitta (`MissionResultScreen`)
-10. **Checkout** — 4 tappe compilazione (`CheckoutScreen`)
-11. **Thank You Page** / Conferma preordine (`ThankYouScreen`)
-12. **Errore 404** / Frequenza smarrita (`NotFoundScreen`)
+1. **Storytelling** (Monologo Joker in `StorytellingScreen`)
+2. **Briefing** (Accetta la sfida in `StorytellingScreen`)
+3. **Tutorial Tappa 1** — "Batti il tempo" (`TutorialScreen`)
+4. **Tutorial Tappa 2** — "Risolvi gli enigmi" (`TutorialScreen`)
+5. **Tutorial Tappa 3** — "Trova tutti gli indizi" (`TutorialScreen`)
+6. **Tutorial Tappa 4** — "Esplora l'ambiente" (`TutorialScreen`)
+7. **Schermata di Pausa** (`PauseOverlay`)
+8. **Esito Missione** — Vittoria o Sconfitta (`MissionResultScreen`)
+9. **Checkout** — 4 tappe compilazione (`CheckoutScreen`)
+10. **Thank You Page** / Conferma ordine (`ThankYouScreen`)
+11. **Errore 404** / Frequenza smarrita (`NotFoundScreen`)
+
+La schermata iniziale usa la copertina fotografica `img_copertina_presentazione.jpg`.
 
 ### Regola vincolante:
 > **L'ambiente 3D deve essere sempre "chiuso" con panorama a 360 gradi (proiezione sferica prospettica 3D), MAI "aperto" come video o immagine equirettangolare 2D piana.**

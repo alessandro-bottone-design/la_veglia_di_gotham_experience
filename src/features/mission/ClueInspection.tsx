@@ -20,6 +20,10 @@ type Stage =
 const HOLD_ANSWER = 250;
 const HOLD_PROGRESS = 240;
 const EASE_OUT = "cubic-bezier(0.18, 0.78, 0.25, 1)";
+const OPEN_MS = 350;
+const CLOSE_MS = 300;
+const FLIGHT_MS = 430;
+const ANIMATION_GRACE_MS = 120;
 
 function pose(x: number, y: number, scale: number, rotation = 0) {
   return `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg) scale(${scale})`;
@@ -34,7 +38,6 @@ export default function ClueInspection({
   paused,
   reduced,
   onClose,
-  onCorrect,
   onLand,
   onFinish,
 }: {
@@ -46,7 +49,6 @@ export default function ClueInspection({
   paused: boolean;
   reduced: boolean;
   onClose: () => void;
-  onCorrect: () => void;
   onLand: () => void;
   onFinish: () => void;
 }) {
@@ -55,8 +57,14 @@ export default function ClueInspection({
   const closingPose = useRef<string | null>(null);
   const motion = useRef<Animation | null>(null);
   const hold = useRef<{ stage: Stage; remaining: number } | null>(null);
+  const advanced = useRef<Stage | null>(null);
+  const accepted = useRef(false);
+  const animationDuration =
+    stage === "opening" ? OPEN_MS : stage === "closing" ? CLOSE_MS : FLIGHT_MS;
 
-  const advance = useEffectEvent(() => {
+  const advance = useEffectEvent((expected: Stage) => {
+    if (stage !== expected || paused || advanced.current === stage) return;
+    advanced.current = stage;
     switch (stage) {
       case "opening":
         setStage("reading");
@@ -86,12 +94,16 @@ export default function ClueInspection({
         : stage === "closing"
           ? marker?.getBoundingClientRect()
           : track.current?.getBoundingClientRect();
-    if (reduced || !target?.width) {
-      advance();
+    if (reduced || !target?.width || !card.current.animate) {
+      advance(stage);
       return;
     }
 
     const bounds = card.current.getBoundingClientRect();
+    if (!bounds.width) {
+      advance(stage);
+      return;
+    }
     const center = stage === "flying" ? (arrivalCount - 0.5) / 5 : 0.5;
     const x =
       target.left + target.width * center - (bounds.left + bounds.width / 2);
@@ -114,38 +126,40 @@ export default function ClueInspection({
         ? [atMarker, atRest]
         : [{ transform: closingPose.current ?? atRest.transform }, atMarker];
     const animation = card.current.animate(frames, {
-      duration: flight ? 430 : stage === "opening" ? 350 : 300,
+      duration: animationDuration,
       easing: flight ? "ease-in-out" : EASE_OUT,
       fill: "both",
     });
     motion.current = animation;
-    animation.onfinish = () => advance();
+    animation.onfinish = () => advance(stage);
     return () => {
       motion.current = null;
       animation.onfinish = null;
       animation.cancel();
     };
-  }, [stage, origin, marker, track, arrivalCount, reduced]);
+  }, [stage, origin, marker, track, arrivalCount, reduced, animationDuration]);
 
   useLayoutEffect(() => {
-    if (!motion.current) return;
-    if (paused) motion.current.pause();
-    else motion.current.play();
+    const animation = motion.current;
+    if (!animation) return;
+    if (paused) animation.pause();
+    else if (animation.playState === "finished") advance(stage);
+    else animation.play();
   }, [paused, stage, reduced]);
 
   useEffect(() => {
-    if (stage !== "confirming" && stage !== "collected") return;
+    if (stage === "reading") return;
     if (hold.current?.stage !== stage) {
-      hold.current = {
-        stage,
-        remaining:
-          stage === "confirming" ? HOLD_ANSWER : reduced ? 0 : HOLD_PROGRESS,
-      };
+      // Use the timer as a fallback when the animation finish event is lost.
+      let remaining = motion.current ? animationDuration + ANIMATION_GRACE_MS : 0;
+      if (stage === "confirming") remaining = HOLD_ANSWER;
+      if (stage === "collected") remaining = reduced ? 0 : HOLD_PROGRESS;
+      hold.current = { stage, remaining };
     }
     if (paused) return;
     const current = hold.current;
     const started = performance.now();
-    const timer = setTimeout(() => advance(), current.remaining);
+    const timer = setTimeout(() => advance(stage), current.remaining);
     return () => {
       clearTimeout(timer);
       current.remaining = Math.max(
@@ -153,7 +167,7 @@ export default function ClueInspection({
         current.remaining - (performance.now() - started),
       );
     };
-  }, [stage, paused, reduced]);
+  }, [stage, paused, reduced, animationDuration]);
 
   useEffect(() => {
     if (paused) return;
@@ -202,7 +216,8 @@ export default function ClueInspection({
           disabled={paused || stage === "flying" || stage === "collected"}
           hint={false}
           onCorrect={() => {
-            onCorrect();
+            if (accepted.current) return;
+            accepted.current = true;
             setStage("confirming");
           }}
         />

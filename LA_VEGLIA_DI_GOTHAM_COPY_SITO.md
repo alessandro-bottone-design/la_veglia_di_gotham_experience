@@ -14,8 +14,8 @@ Testi del sito La Veglia di Gotham nella sequenza di navigazione. Le righe contr
 | Accessibilità della barra | Controlli esperienza |
 | Accessibilità dell’icona audio attivo | Silenzia audio |
 | Accessibilità dell’icona audio silenziato | Attiva audio |
-| Accessibilità dell’icona pausa | Metti in pausa esperienza |
-| Accessibilità dell’icona riprendi | Riprendi esperienza |
+| Accessibilità dell’icona pausa in missione | Metti in pausa esperienza |
+| Accessibilità dell’icona riprendi in missione | Riprendi esperienza |
 
 ## 2. Carta del Joker
 
@@ -29,7 +29,7 @@ Testi del sito La Veglia di Gotham nella sequenza di navigazione. Le righe contr
 | Battuta | Benvenuto al tuo spettacolo, Batman. |
 | Battuta | Ho nascosto cinque carte nella tua Batcaverna. |
 | Battuta | Trovale e risolvi gli enigmi. |
-| Battuta | Hai tre minuti, poi salto agli effetti speciali. |
+| Battuta | Hai un minuto, poi salto agli effetti speciali. |
 | Pulsante | Accetta la sfida |
 
 ## 3. Tutorial e gioco
@@ -38,7 +38,7 @@ Testi del sito La Veglia di Gotham nella sequenza di navigazione. Le righe contr
 |---|---|
 | Titolo del tutorial | ALLARME ALLA BATCAVERNA |
 | Descrizione della situazione | Il Joker ha attivato una bomba nella Batcaverna. |
-| Scheda 1 · titolo | Tre minuti |
+| Scheda 1 · titolo | Un minuto |
 | Scheda 1 · istruzione | Risolvi tutti gli enigmi prima che scada il tempo. |
 | Scheda 2 · titolo | Risolvi gli enigmi |
 | Scheda 2 · istruzione | Apri una carta e scegli la risposta giusta per raccogliere l’indizio. |
@@ -50,7 +50,7 @@ Testi del sito La Veglia di Gotham nella sequenza di navigazione. Le righe contr
 | Accessibilità della freccia avanti | Istruzione successiva |
 | Pulsante che avvia il timer | Inizia la missione |
 | Etichetta del timer | TEMPO ALLA DETONAZIONE |
-| Valore del timer | {MM.SS}, con partenza da 03.00 |
+| Valore del timer | {MM.SS}, da 01.00 a 00.00 |
 | Etichetta del contatore | INDIZI RACCOLTI |
 | Valore del contatore | {indizi raccolti} / 5 |
 | Accessibilità dell’area | Esplorazione: {batcomputer, armeria o batmobile} |
@@ -113,7 +113,7 @@ Testi del sito La Veglia di Gotham nella sequenza di navigazione. Le righe contr
 | Vittoria · battuta | Hai fermato il conto alla rovescia, Batman. |
 | Vittoria · battuta | Un applauso! |
 | Vittoria · battuta | E adesso, signore e signori, alziamo il sipario. |
-| Vittoria · tempo rimasto | {MM.SS}, con etichetta TEMPO ALLA DETONAZIONE |
+| Vittoria · tempo impiegato | {MM.SS}, con etichetta TEMPO IMPIEGATO |
 | Vittoria · pulsante | Scopri la statua |
 | Titolo della sconfitta | MISSIONE FALLITA |
 | Sconfitta · battuta | Sipario, Batman! |
@@ -137,15 +137,15 @@ Testi del sito La Veglia di Gotham nella sequenza di navigazione. Le righe contr
 | Titolo finale | La veglia di Gotham |
 | Descrittore | Statua di Batman in bronzo, scala 1:1 |
 | Dimensioni | 180 × 130 × 135 cm circa (A × L × P), base inclusa |
-| Pulsante nella barra e nel pannello finale | Preordina la statua |
+| Pulsante nella barra e nel pannello finale | Ordina la statua |
 
 Titolo, descrittore e dimensioni compaiono anche nella versione a movimento ridotto. In quella versione, il lettore di schermo riceve anche i testi dei tre pannelli.
 
-## 6. Preordine
+## 6. Ordine
 
 | Elemento | Testo |
 |---|---|
-| Titolo della schermata | Preordine |
+| Titolo della schermata | Ordine |
 | Istruzione | Usa le frecce per cambiare tappa o premi Spazio per avanzare. |
 | Accessibilità della freccia indietro | Tappa precedente |
 | Accessibilità della freccia avanti | Tappa successiva |
@@ -209,10 +209,10 @@ Titolo, descrittore e dimensioni compaiono anche nella versione a movimento rido
 | Riga trasporto · valore | Incluso |
 | Riga totale · etichetta | Totale |
 | Riga totale · importo | 12.900 € |
-| Pulsante di invio | Conferma il preordine |
-| Accessibilità durante l’attesa | Conferma del preordine in corso. |
-| Titolo della conferma | Preordine confermato |
-| Etichetta | Numero preordine |
+| Pulsante di invio | Conferma l’ordine |
+| Accessibilità durante l’attesa | Conferma dell’ordine in corso. |
+| Titolo della conferma | Ordine confermato |
+| Etichetta | Numero ordine |
 | Valore | ord-bw-4019 |
 | Etichetta | Prodotto |
 | Valore | La veglia di Gotham |
@@ -256,4 +256,4 @@ Titolo, descrittore e dimensioni compaiono anche nella versione a movimento rido
 |---|---|
 | Titolo condiviso | La Veglia di Gotham |
 | Descrizione per la ricerca | Entra nella Batcaverna e risolvi gli enigmi del Joker. Un progetto accademico per computer di Alessandro Bottone. |
-| Descrizione condivisa | Hai tre minuti per trovare le cinque carte del Joker nella Batcaverna. |
+| Descrizione condivisa | Hai un minuto per trovare le cinque carte del Joker nella Batcaverna. |

@@ -4,7 +4,7 @@ import { Button, IconButton } from "../../components/ui/DesignSystem";
 const STEPS = [
   [
     "389:8586",
-    "Tre minuti",
+    "Un minuto",
     "Risolvi tutti gli enigmi prima che scada il tempo.",
   ],
   [

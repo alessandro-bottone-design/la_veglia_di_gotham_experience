@@ -26,11 +26,11 @@ Sull’URL della candidata verifica questi scenari.
 
 - La home risponde `200` e **Entra nella Batcaverna** avvia il percorso verso il tutorial. Una pagina sconosciuta risponde `404` e mostra **Torna alla home**.
 - Un video panoramico, un video di transizione e alcuni fotogrammi WebP sono serviti correttamente. Su desktop il Batcomputer conserva la prospettiva e la navbar rimane trasparente.
-- `/#statua` mostra lo showreel a schermo intero. Le card si dissolvono durante lo scroll e il preordine finale apre `/#checkout`.
-- Il checkout mostra i dati di Bruce Wayne in sola lettura, PayPal preselezionato e **12.900 €** con trasporto incluso. La carta alternativa mostra i dettagli mascherati. **Conferma il preordine** arriva a `/#conferma`. L’indirizzo di conferma aperto in una sessione nuova riconduce allo showreel.
+- `/#statua` mostra lo showreel a schermo intero. Le card si dissolvono durante lo scroll e il pulsante **Ordina la statua** nel finale apre `/#checkout`.
+- Il checkout mostra i dati di Bruce Wayne in sola lettura, PayPal preselezionato e **12.900 €** con trasporto incluso. La carta alternativa mostra i dettagli mascherati. **Conferma l’ordine** arriva a `/#conferma`. L’indirizzo di conferma aperto in una sessione nuova riconduce allo showreel.
 - La compatibilità touch e la preferenza di movimento ridotto mostrano le alternative previste.
 
-Dopo le verifiche, promuovi quella stessa candidata con `vercel promote <URL-o-ID-della-candidata>`. Ripeti i controlli essenziali sul [dominio pubblico](https://batman-statue-experience.vercel.app/) e verifica in dashboard che il dominio punti all’ID promosso. Conserva link alla PR, SHA, ID Vercel ed esito delle verifiche nel resoconto di rilascio. [Riferimento Vercel CLI per la promozione](https://vercel.com/docs/cli/promote)
+Dopo le verifiche, promuovi quella stessa candidata con `vercel promote <URL-o-ID-della-candidata>`. Ripeti i controlli essenziali sul [dominio pubblico](https://lavegliadigothamexperience.vercel.app/) e verifica in dashboard che il dominio punti all’ID promosso. Conserva link alla PR, SHA, ID Vercel ed esito delle verifiche nel resoconto di rilascio. [Riferimento Vercel CLI per la promozione](https://vercel.com/docs/cli/promote)
 
 ## Ripristino
 

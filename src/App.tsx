@@ -21,7 +21,10 @@ import {
   MobileNotice,
 } from "./components/ui/DesignSystem";
 import { useDesktop } from "./hooks/useDesktop";
-import { useMissionTimer } from "./features/mission/useMissionTimer";
+import {
+  MISSION_SECONDS,
+  useMissionTimer,
+} from "./features/mission/useMissionTimer";
 import {
   experienceReducer,
   initialExperience,
@@ -64,9 +67,8 @@ function Experience() {
   const viewPhase = failed ? "loss" : phase;
   const previousView = useRef(viewPhase);
   const [paused, setPaused] = useState(false),
-    [muted, setMuted] = useState(false),
-    [ready, setReady] = useState(false);
-  const [collecting, setCollecting] = useState(false);
+    [muted, setMuted] = useState(false);
+  const [readyRoom, setReadyRoom] = useState<string | null>(null);
   const progressTrack = useRef<HTMLSpanElement>(null);
   const reduced = !!useReducedMotion(),
     heading = useRef<HTMLDivElement>(null);
@@ -80,16 +82,21 @@ function Experience() {
   const playing =
     status === "active" &&
     ["batcomputer", "armeria", "batmobile"].includes(phase);
+  const roomKey = run + ":" + scene;
+  const setRoomReady = useCallback(
+    (ready: boolean) => {
+      setReadyRoom((previous) => {
+        if (ready) return roomKey;
+        return previous === roomKey ? null : previous;
+      });
+    },
+    [roomKey],
+  );
   const time = useMissionTimer(
-    status,
-    paused || !ready || collecting,
-    transition,
+    run,
+    playing && readyRoom === roomKey && !paused,
     useCallback(() => dispatch({ type: "fail" }), []),
   );
-  const { resetTimer } = time;
-  useEffect(() => {
-    resetTimer();
-  }, [run, resetTimer]);
   useEffect(() => {
     if (previousView.current === viewPhase) return;
     previousView.current = viewPhase;
@@ -98,15 +105,6 @@ function Experience() {
     const main = heading.current;
     if (main && !main.contains(document.activeElement)) main.focus();
   }, [viewPhase]);
-  useEffect(() => {
-    if (
-      state.completed === 2 &&
-      status === "active" &&
-      time.elapsedSeconds <= 45 &&
-      !time.bonusTimeGranted
-    )
-      time.grantBonusTime(60);
-  }, [state.completed, status, time]);
   useEffect(() => {
     BatcavernAudio.setPaused(paused);
   }, [paused]);
@@ -141,8 +139,7 @@ function Experience() {
     if (location.hash === "#conferma" && !state.order)
       history.replaceState(null, "", "#statua");
   }, [state.order]);
-  const canPause =
-    phase !== "checkout" && phase !== "thankyou" && phase !== "showreel";
+  const canPause = playing;
   const togglePause = () => {
     if (paused) {
       BatcavernAudio.setPaused(false);
@@ -164,24 +161,9 @@ function Experience() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [canPause]);
-  useEffect(() => {
-    if (!paused || phase !== "showreel") return;
-    const position = window.scrollY;
-    const keepPosition = () => {
-      if (window.scrollY !== position) window.scrollTo(0, position);
-    };
-    const preventWheel = (event: WheelEvent) => {
-      if (!event.ctrlKey) event.preventDefault();
-    };
-    window.addEventListener("scroll", keepPosition, { passive: true });
-    window.addEventListener("wheel", preventWheel, { passive: false });
-    return () => {
-      window.removeEventListener("scroll", keepPosition);
-      window.removeEventListener("wheel", preventWheel);
-    };
-  }, [paused, phase]);
   const showBackdrop =
-    failed || (!playing && !transition && phase !== "showreel");
+    failed ||
+    (!playing && !transition && phase !== "showreel" && phase !== "start");
   const goStatue = () => navigate("showreel");
   const goCheckout = () => navigate("checkout");
   let navPhase: NavPhase;
@@ -227,9 +209,9 @@ function Experience() {
         }}
         isPaused={paused}
         onTogglePause={canPause ? togglePause : undefined}
-        onPreorder={phase === "showreel" && !paused ? goCheckout : undefined}
+        onOrder={phase === "showreel" ? goCheckout : undefined}
         completedCount={phase === "tutorial" ? 0 : state.completed}
-        timeLeft={phase === "tutorial" ? 180 : time.timeLeft}
+        timeLeft={phase === "tutorial" ? MISSION_SECONDS : time.timeLeft}
         progressTrack={progressTrack}
       />
       <main id="experience-content" ref={heading} tabIndex={-1}>
@@ -266,20 +248,26 @@ function Experience() {
                 <GamificationScreen
                   key={run + scene}
                   scene={scene}
-                  onProgress={(count) => dispatch({ type: "progress", count })}
+                  onProgress={(count) => {
+                    dispatch({ type: "progress", count });
+                    if (count === 5) time.finish();
+                  }}
                   baseCompleted={
                     scene === "batcomputer" ? 0 : scene === "armeria" ? 2 : 3
                   }
                   isPaused={paused}
                   isMuted={muted}
                   onNext={() => {
-                    if (scene === "batmobile")
-                      dispatch({ type: "win", time: time.timeLeft });
-                    else dispatch({ type: "next" });
+                    if (scene !== "batmobile") {
+                      if (time.hasTime()) dispatch({ type: "next" });
+                      return;
+                    }
+                    const elapsed = time.getResult();
+                    if (elapsed !== null)
+                      dispatch({ type: "win", time: elapsed });
                   }}
-                  onReady={setReady}
+                  onReady={setRoomReady}
                   onExit={goStatue}
-                  onCollecting={setCollecting}
                   progressTrack={progressTrack}
                 />
               </ErrorBoundary>
@@ -304,7 +292,7 @@ function Experience() {
                 onContinue={goStatue}
               />
             )}
-            {phase === "showreel" && <ShowreelScreen onPreorder={goCheckout} />}
+            {phase === "showreel" && <ShowreelScreen onOrder={goCheckout} />}
             {phase === "checkout" && (
               <CheckoutScreen
                 onSuccess={(quantity, total) => {

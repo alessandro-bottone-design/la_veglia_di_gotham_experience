@@ -31,7 +31,11 @@ export default function MissionResultScreen({
             ? "Hai fermato il conto alla rovescia, Batman. Un applauso! E adesso, signore e signori, alziamo il sipario."
             : "Sipario, Batman! Il tempo è scaduto e della tua Batcaverna mi sa che resta solo il parcheggio."}
         </p>
-        {won && <Timer seconds={seconds} tone="primary" />}
+        <Timer
+          seconds={seconds}
+          tone={won ? "primary" : "secondary"}
+          label={won ? "Tempo impiegato" : undefined}
+        />
         <Button tone={won ? "primary" : "secondary"} onClick={onContinue}>
           {won ? "Scopri la statua" : "Riprova la missione"}
         </Button>

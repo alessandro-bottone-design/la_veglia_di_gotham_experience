@@ -5,7 +5,7 @@ import { BatcavernAudio } from "../../lib/audioManager";
 const CARD_PROMPT = "Gira la carta";
 const STORY_MESSAGE =
   "Benvenuto al tuo spettacolo, Batman. Ho nascosto cinque carte nella tua Batcaverna. " +
-  "Trovale e risolvi gli enigmi. Hai tre minuti, poi salto agli effetti speciali.";
+  "Trovale e risolvi gli enigmi. Hai un minuto, poi salto agli effetti speciali.";
 
 export default function StorytellingScreen({
   onBegin,

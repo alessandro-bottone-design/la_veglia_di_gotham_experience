@@ -37,7 +37,6 @@ interface Props {
   isMuted?: boolean;
   onReady: (ready: boolean) => void;
   onExit: () => void;
-  onCollecting: (collecting: boolean) => void;
   progressTrack: RefObject<HTMLSpanElement | null>;
 }
 
@@ -117,7 +116,6 @@ export default function GamificationScreen({
   isMuted = false,
   onReady,
   onExit,
-  onCollecting,
   progressTrack,
 }: Props) {
   const [retry, setRetry] = useState(0);
@@ -125,6 +123,7 @@ export default function GamificationScreen({
   const [active, setActive] = useState<{
     id: number;
     origin: DOMRect | null;
+    roomCount: number;
   } | null>(null);
   const [focusTarget, setFocusTarget] = useState<ClueFocus | null>(null);
   const [contextLost, setContextLost] = useState(false);
@@ -204,8 +203,6 @@ export default function GamificationScreen({
     return () => onReady(false);
   }, [ready, onReady]);
 
-  useEffect(() => () => onCollecting(false), [onCollecting]);
-
   useLayoutEffect(() => {
     if (active || restoreFocus.current === null) return;
     const marker = markers.current.get(restoreFocus.current);
@@ -233,6 +230,7 @@ export default function GamificationScreen({
     setFocusTarget(null);
     setActive({
       id,
+      roomCount: completed.length + 1,
       origin:
         marker?.style.visibility === "visible"
           ? marker.getBoundingClientRect()
@@ -243,7 +241,6 @@ export default function GamificationScreen({
   function recover() {
     if (graphics === "unavailable") setGraphics("checking");
     setActive(null);
-    onCollecting(false);
     setContextLost(false);
     setRetry((value) => value + 1);
   }
@@ -293,7 +290,6 @@ export default function GamificationScreen({
               (event) => {
                 event.preventDefault();
                 onReady(false);
-                onCollecting(false);
                 setActive(null);
                 setContextLost(true);
               },
@@ -365,24 +361,21 @@ export default function GamificationScreen({
             origin={active.origin}
             marker={markers.current.get(clue.id)}
             track={progressTrack}
-            arrivalCount={baseCompleted + completed.length + 1}
+            arrivalCount={baseCompleted + active.roomCount}
             paused={isPaused}
             reduced={reduced}
             onClose={() => {
               restoreFocus.current = clue.id;
               setActive(null);
             }}
-            onCorrect={() => onCollecting(true)}
             onLand={() => {
-              const next = [...completed, clue.id];
-              setCompleted(next);
-              onProgress(baseCompleted + next.length);
+              setCompleted((previous) => [...previous, clue.id]);
+              onProgress(baseCompleted + active.roomCount);
               BatcavernAudio.clueCollected();
             }}
             onFinish={() => {
-              onCollecting(false);
               setActive(null);
-              if (completed.length === config.clues.length) onNext();
+              if (active.roomCount === config.clues.length) onNext();
               else section.current?.focus({ preventScroll: true });
             }}
           />
